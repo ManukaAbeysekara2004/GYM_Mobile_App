@@ -23,6 +23,7 @@ app.use('/api/admin', require('./routes/AdminRoutes'));
 app.use('/api/gym', require('./routes/GymRoutes'));
 app.use('/api/coach', require('./routes/CoachRoutes'));
 app.use('/api/admin-manage', require('./routes/AdminManageRoutes'));
+app.use('/api/workouts', require('./routes/WorkoutsRoutes'));
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));

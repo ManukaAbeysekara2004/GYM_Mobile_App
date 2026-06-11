@@ -2,7 +2,7 @@ const User = require('../models/User');
 const Admin = require('../models/Admin');
 const Gym = require('../models/Gym');
 const Coach = require('../models/Coach');
-const Coachpost = require('../models/Coachpost');
+const Coachpost = require('../models/CoachPost');
 const bcrypt = require('bcryptjs');
 
 // --- 01. Coach Registration --- //

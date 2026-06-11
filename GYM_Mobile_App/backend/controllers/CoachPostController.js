@@ -1,4 +1,4 @@
-const Coachpost = require('../models/Coachpost');
+const Coachpost = require('../models/CoachPost');
 const Coach = require('../models/Coach');
 
 // --- 01. Create a new Coach Post --- //

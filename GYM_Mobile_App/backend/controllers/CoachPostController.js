@@ -1,4 +1,4 @@
-const Coachpost = require('../models/CoachPost');
+const Coachpost = require('../models/Coachpost');
 const Coach = require('../models/Coach');
 
 // --- 01. Create a new Coach Post --- //
@@ -269,6 +269,10 @@ exports.getAllCoachPosts = async (req, res) => {
     try {
         // Get all coachposts
         const coachposts = await Coachpost.find();
+
+        if (!coachposts || coachposts.length === 0) {
+            return res.status(404).json({ message: 'No coach post found' });
+        }
 
         res.status(200).json({ coachposts });
     } catch (error) {

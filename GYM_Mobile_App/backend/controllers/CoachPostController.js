@@ -8,7 +8,7 @@ exports.createCoachPost = async (req, res) => {
         const { coachId } = req.params;
         const { fullname, description, experience, fee, duration, contactNumber, postimage } = req.body;
 
-        const coach = await Coach.findById(coachId);
+        let coach = await Coach.findById(coachId);
         if (!coach) {
             return res.status(404).json({ message: 'Coach not found' });
         }

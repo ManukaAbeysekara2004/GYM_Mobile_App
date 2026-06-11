@@ -10,9 +10,13 @@ exports.createGymPost = async (req, res) => {
         const { gymInfotmation, gymFasilities, openHours, closeHours, gymContactNumber, city, packages, gymImg } = req.body;
 
         // Check if the Gym ID is registered 
-        let GymID = await Gym.findById(gymId);
-        if (!GymID) {
-            return res.status(400).json({ message: 'Invalid Gym ID' });
+        let Gym = await Gym.findById(gymId);
+        if (!Gym) {
+            return res.status(400).json({ message: 'Gym not found' });
+        }
+
+        if (!Gym.Approve) {
+            return res.status(400).json({ message: 'Gym is not approved, So you cant create Gym post' });
         }
 
         let GymId = await GymPost.findOne({ gymId });

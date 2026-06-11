@@ -2,6 +2,7 @@ const User = require('../models/User');
 const Admin = require('../models/Admin');
 const Gym = require('../models/Gym');
 const Coach = require('../models/Coach');
+const Coachpost = require('../models/Coachpost');
 const bcrypt = require('bcryptjs');
 
 // --- 01. Coach Registration --- //
@@ -262,7 +263,12 @@ exports.Coach_Delete = async (req, res) => {
             return res.status(404).json({ message: 'Invalid password' });
         }
 
-        // -----> post delete function 
+        // delete coach post if have function
+        let deleteCoachPost = await Coachpost.findOne({ coachId: coachId });
+
+        if (deleteCoachPost) {
+            await Coachpost.findByIdAndDelete(deleteCoachPost._id);
+        }
 
         // Delete coach
         let delete_coach = await Coach.findByIdAndDelete(coachId);

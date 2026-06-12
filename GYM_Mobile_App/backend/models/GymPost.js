@@ -61,4 +61,4 @@ const gymInfoSchema = new mongoose.Schema({
 
 }, { timestamps: true });
 
-module.exports = mogoose.model('GymInfo', gymInfoSchema);
+module.exports = mongoose.model('GymPost', gymInfoSchema);

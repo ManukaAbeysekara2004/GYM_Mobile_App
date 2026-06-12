@@ -26,7 +26,7 @@ app.use('/api/admin-manage', require('./routes/AdminManageRoutes'));
 app.use('/api/workouts', require('./routes/WorkoutsRoutes'));
 app.use('/api/coachposts', require('./routes/CoachPostRoutes'));
 app.use('/api/gym-posts', require('./routes/GymPostRoutes'));
-app.use('/api/supplements', require('./routes/SupplementRoutes'));
+app.use('/api/supplements', require('./routes/SupplementPostRoutes'));
 app.use('/api/review', require('./routes/ReviewAndRatingRoutes'));
 
 const PORT = process.env.PORT || 5000;

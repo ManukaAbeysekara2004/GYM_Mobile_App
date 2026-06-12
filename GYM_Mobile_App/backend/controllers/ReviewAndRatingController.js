@@ -45,7 +45,7 @@ exports.createReviewAndRating = async (req, res) => {
 
 exports.updateReviewAndRating = async (req, res) => {
     try {
-        const { PersonID } = req.params;
+        const { ReviewAndRatingID, PersonID } = req.params;
         const { Review, Rating } = req.body;
 
         // Check The Person is exist or not
@@ -66,6 +66,15 @@ exports.updateReviewAndRating = async (req, res) => {
         // Rating must be between 1 to 5
         if (Rating < 1 || Rating > 5) {
             return res.status(400).json({ message: 'Rating must be between 1 to 5' });
+        }
+
+        let reviewAndRating = await ReviewAndRating.findById(ReviewAndRatingID);
+        if (!reviewAndRating) {
+            return res.status(404).json({ message: 'Review and rating not found' });
+        }
+
+        if (reviewAndRating.PersonID !== PersonID) {
+            return res.status(401).json({ message: 'You are not authorized to update this review and rating' });
         }
 
         const updateReviewAndRating = await ReviewAndRating.findOneAndUpdate(
@@ -136,7 +145,7 @@ exports.getAllReviewAndRating = async (req, res) => {
 
 exports.deleteReviewAndRatingByPersonID = async (req, res) => {
     try {
-        const { PersonID } = req.params;
+        const { ReviewAndRatingID, PersonID } = req.params;
 
         // Check The Person is exist or not
         let user = await User.findById(PersonID);
@@ -153,12 +162,24 @@ exports.deleteReviewAndRatingByPersonID = async (req, res) => {
             }
         }
 
-        const reviewAndRating = await ReviewAndRating.findOneAndDelete({ PersonID: PersonID });
+        let reviewAndRating = await ReviewAndRating.findById(ReviewAndRatingID);
         if (!reviewAndRating) {
             return res.status(404).json({ message: 'Review and rating not found' });
         }
 
-        res.status(200).json({ message: 'Review and rating deleted successfully', reviewAndRating });
+        if (reviewAndRating.PersonID !== PersonID) {
+            return res.status(401).json({ message: 'You are not authorized to update this review and rating' });
+        }
+
+        let deleteReviewAndRating = await ReviewAndRating.findOneAndDelete(
+            { PersonID: PersonID }
+        );
+
+        if (!deleteReviewAndRating) {
+            return res.status(404).json({ message: 'Review and rating not found' });
+        }
+
+        res.status(200).json({ message: 'Review and rating deleted successfully', deleteReviewAndRating });
     } catch (error) {
         res.status(500).json({ message: 'Server Error', error: error.message });
     }

@@ -168,9 +168,19 @@ exports.deleteReviewAndRatingByPersonID = async (req, res) => {
 
 exports.deleteReviewAndRatingByIDAdminOnly = async (req, res) => {
     try {
-        const { ReviewAndRatingID } = req.params;
+        const { ReviewAndRatingID, AdminID } = req.params;
 
-        const reviewAndRating = await ReviewAndRating.findByIdAndDelete({ ReviewAndRatingID });
+        // Check The Admin is exist or not
+        let admin = await Admin.findById(AdminID);
+        if (!admin) {
+            return res.status(404).json({ message: 'Admin not found' });
+        }
+
+        if (!admin.Approve) {
+            return res.status(400).json({ message: 'Admin is not approved, So you cant delete review and rating' });
+        }
+
+        const reviewAndRating = await ReviewAndRating.findByIdAndDelete(ReviewAndRatingID);
         if (!reviewAndRating) {
             return res.status(404).json({ message: 'Review and rating not found' });
         }

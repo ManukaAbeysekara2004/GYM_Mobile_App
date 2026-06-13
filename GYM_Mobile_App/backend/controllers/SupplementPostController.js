@@ -6,7 +6,7 @@ const Admin = require('../models/Admin');
 exports.Supplement_Create = async (req, res) => {
     try {
         const { adminId } = req.params;
-        const { supplementName, supplementBrand, supplementType, supplementDescription, supplementPrice, supplementStock, supplementImage } = req.body;
+        const { SupplementName, SupplementBrand, SupplementType, SupplementDescription, SupplementPrice, SupplementStock, SupplementImage } = req.body;
 
         let admin = await Admin.findById(adminId);
         if (!admin) {
@@ -14,25 +14,25 @@ exports.Supplement_Create = async (req, res) => {
         }
 
         if (!admin.Approve) {
-            return res.status(400).json({ message: 'Admin is not approved, So you cant create supplement post' });
+            return res.status(400).json({ message: 'Admin is not approved' });
         }
 
-        if (supplementPrice <= 0) {
+        if (SupplementPrice <= 0) {
             return res.status(400).json({ message: 'Supplement price must be greater than 0' });
         }
 
-        if (supplementStock < 0) {
+        if (SupplementStock < 0) {
             return res.status(400).json({ message: 'Supplement stock must be greater than 0' });
         }
 
-        let Available
-        if (supplementStock == 0) {
-            Available = false;
+        let SupplementAvailable
+        if (SupplementStock == 0) {
+            SupplementAvailable = false;
         } else {
-            Available = true;
+            SupplementAvailable = true;
         }
 
-        const newSupplement = new supplement({ supplementName, supplementBrand, supplementType, supplementDescription, supplementPrice, supplementStock, supplementAvailable: Available, supplementImage });
+        const newSupplement = new supplement({ SupplementName, SupplementBrand, SupplementType, SupplementDescription, SupplementPrice, SupplementStock, SupplementAvailable: SupplementAvailable, SupplementImage });
         await newSupplement.save();
 
         res.status(201).json({ message: 'Supplement created successfully', supplement: newSupplement });
@@ -46,7 +46,7 @@ exports.Supplement_Create = async (req, res) => {
 exports.Supplement_Update_Name = async (req, res) => {
     try {
         const { supplementPostId, adminId } = req.params;
-        const { supplementName } = req.body;
+        const { SupplementName } = req.body;
 
         let admin = await Admin.findById(adminId);
         if (!admin) {
@@ -54,19 +54,19 @@ exports.Supplement_Update_Name = async (req, res) => {
         }
 
         if (!admin.Approve) {
-            return res.status(400).json({ message: 'Admin is not approved, So you cant create supplement post' });
+            return res.status(400).json({ message: 'Admin is not approved' });
         }
 
         // Check if supplement is exist or not
-        let supplement = await supplement.findById(supplementPostId);
-        if (!supplement) {
+        let Supplement = await supplement.findById(supplementPostId);
+        if (!Supplement) {
             return res.status(404).json({ message: 'Supplement post not found' });
         }
 
         // Update supplement name
         let update_supplementName = await supplement.findByIdAndUpdate(
             supplementPostId,
-            { $set: { supplementName: supplementName } },
+            { $set: { SupplementName: SupplementName } },
             { new: true }
         );
 
@@ -86,7 +86,7 @@ exports.Supplement_Update_Name = async (req, res) => {
 exports.Supplement_Update_Brand = async (req, res) => {
     try {
         const { supplementPostId, adminId } = req.params;
-        const { supplementBrand } = req.body;
+        const { SupplementBrand } = req.body;
 
         let admin = await Admin.findById(adminId);
         if (!admin) {
@@ -94,19 +94,19 @@ exports.Supplement_Update_Brand = async (req, res) => {
         }
 
         if (!admin.Approve) {
-            return res.status(400).json({ message: 'Admin is not approved, So you cant create supplement post' });
+            return res.status(400).json({ message: 'Admin is not approved' });
         }
 
         // Check if supplement is exist or not
-        let supplement = await supplement.findById(supplementPostId);
-        if (!supplement) {
+        let Supplement = await supplement.findById(supplementPostId);
+        if (!Supplement) {
             return res.status(404).json({ message: 'Supplement post not found' });
         }
 
         // Update supplement brand
         let update_supplementBrand = await supplement.findByIdAndUpdate(
             supplementPostId,
-            { $set: { supplementBrand: supplementBrand } },
+            { $set: { SupplementBrand: SupplementBrand } },
             { new: true }
         );
 
@@ -125,7 +125,7 @@ exports.Supplement_Update_Brand = async (req, res) => {
 exports.Supplement_Update_Type = async (req, res) => {
     try {
         const { supplementPostId, adminId } = req.params;
-        const { supplementType } = req.body;
+        const { SupplementType } = req.body;
 
         let admin = await Admin.findById(adminId);
         if (!admin) {
@@ -133,19 +133,19 @@ exports.Supplement_Update_Type = async (req, res) => {
         }
 
         if (!admin.Approve) {
-            return res.status(400).json({ message: 'Admin is not approved, So you cant create supplement post' });
+            return res.status(400).json({ message: 'Admin is not approved' });
         }
 
         // Check if supplement is exist or not
-        let supplement = await supplement.findById(supplementPostId);
-        if (!supplement) {
+        let Supplement = await supplement.findById(supplementPostId);
+        if (!Supplement) {
             return res.status(404).json({ message: 'Supplement post not found' });
         }
 
         // Update supplement type
         let update_supplementType = await supplement.findByIdAndUpdate(
             supplementPostId,
-            { $set: { supplementType: supplementType } },
+            { $set: { SupplementType: SupplementType } },
             { new: true }
         );
 
@@ -164,7 +164,7 @@ exports.Supplement_Update_Type = async (req, res) => {
 exports.Supplement_Update_Description = async (req, res) => {
     try {
         const { supplementPostId, adminId } = req.params;
-        const { supplementDescription } = req.body;
+        const { SupplementDescription } = req.body;
 
         let admin = await Admin.findById(adminId);
         if (!admin) {
@@ -172,19 +172,19 @@ exports.Supplement_Update_Description = async (req, res) => {
         }
 
         if (!admin.Approve) {
-            return res.status(400).json({ message: 'Admin is not approved, So you cant create supplement post' });
+            return res.status(400).json({ message: 'Admin is not approved' });
         }
 
         // Check if supplement is exist or not
-        let supplement = await supplement.findById(supplementPostId);
-        if (!supplement) {
+        let Supplement = await supplement.findById(supplementPostId);
+        if (!Supplement) {
             return res.status(404).json({ message: 'Supplement post not found' });
         }
 
         // Update supplement description
         let update_supplementDescription = await supplement.findByIdAndUpdate(
             supplementPostId,
-            { $set: { supplementDescription: supplementDescription } },
+            { $set: { SupplementDescription: SupplementDescription } },
             { new: true }
         );
 
@@ -203,7 +203,7 @@ exports.Supplement_Update_Description = async (req, res) => {
 exports.Supplement_Update_Price = async (req, res) => {
     try {
         const { supplementPostId, adminId } = req.params;
-        const { supplementPrice } = req.body;
+        const { SupplementPrice } = req.body;
 
         let admin = await Admin.findById(adminId);
         if (!admin) {
@@ -211,19 +211,19 @@ exports.Supplement_Update_Price = async (req, res) => {
         }
 
         if (!admin.Approve) {
-            return res.status(400).json({ message: 'Admin is not approved, So you cant create supplement post' });
+            return res.status(400).json({ message: 'Admin is not approved' });
         }
 
         // Check if supplement is exist or not
-        let supplement = await supplement.findById(supplementPostId);
-        if (!supplement) {
+        let Supplement = await supplement.findById(supplementPostId);
+        if (!Supplement) {
             return res.status(404).json({ message: 'Supplement post not found' });
         }
 
         // Update supplement price
         let update_supplementPrice = await supplement.findByIdAndUpdate(
             supplementPostId,
-            { $set: { supplementPrice: supplementPrice } },
+            { $set: { SupplementPrice: SupplementPrice } },
             { new: true }
         );
 
@@ -242,7 +242,7 @@ exports.Supplement_Update_Price = async (req, res) => {
 exports.Supplement_Update_Stock = async (req, res) => {
     try {
         const { supplementPostId, adminId } = req.params;
-        const { supplementStock } = req.body;
+        const { SupplementStock } = req.body;
 
         let admin = await Admin.findById(adminId);
         if (!admin) {
@@ -250,30 +250,30 @@ exports.Supplement_Update_Stock = async (req, res) => {
         }
 
         if (!admin.Approve) {
-            return res.status(400).json({ message: 'Admin is not approved, So you cant create supplement post' });
-        }
-
-        if (supplementStock < 0) {
-            return res.status(400).json({ message: 'Supplement stock must be greater than 0' });
-        }
-
-        let Available
-        if (supplementStock == 0) {
-            Available = false;
-        } else {
-            Available = true;
+            return res.status(400).json({ message: 'Admin is not approved' });
         }
 
         // Check if supplement is exist or not
-        let supplement = await supplement.findById(supplementPostId);
-        if (!supplement) {
+        let Supplement = await supplement.findById(supplementPostId);
+        if (!Supplement) {
             return res.status(404).json({ message: 'Supplement post not found' });
+        }
+
+        if (SupplementStock < 0) {
+            return res.status(400).json({ message: 'Supplement stock must be greater than 0' });
+        }
+
+        let SupplementAvailable
+        if (SupplementStock == 0) {
+            SupplementAvailable = false;
+        } else {
+            SupplementAvailable = true;
         }
 
         // Update supplement stock
         let update_supplementStock = await supplement.findByIdAndUpdate(
             supplementPostId,
-            { $set: { supplementStock: supplementStock } },
+            { $set: { SupplementStock: SupplementStock } },
             { new: true }
         );
 
@@ -284,7 +284,7 @@ exports.Supplement_Update_Stock = async (req, res) => {
         // Update supplement available
         let update_supplementAvailable = await supplement.findByIdAndUpdate(
             supplementPostId,
-            { $set: { supplementAvailable: Available } },
+            { $set: { SupplementAvailable: SupplementAvailable } },
             { new: true }
         );
 
@@ -292,7 +292,7 @@ exports.Supplement_Update_Stock = async (req, res) => {
             return res.status(404).json({ message: 'Failed to update supplement available' });
         }
 
-        res.status(200).json({ message: 'Supplement stock updated successfully', update_supplementStock, update_supplementAvailable });
+        res.status(200).json({ message: 'Supplement stock updated successfully', update_supplementAvailable });
     } catch (error) {
         res.status(500).json({ message: 'Server Error', error: error.message });
     }
@@ -303,7 +303,7 @@ exports.Supplement_Update_Stock = async (req, res) => {
 exports.Supplement_Update_Image = async (req, res) => {
     try {
         const { supplementPostId, adminId } = req.params;
-        const { supplementImage } = req.body;
+        const { SupplementImage } = req.body;
 
         let admin = await Admin.findById(adminId);
         if (!admin) {
@@ -311,19 +311,19 @@ exports.Supplement_Update_Image = async (req, res) => {
         }
 
         if (!admin.Approve) {
-            return res.status(400).json({ message: 'Admin is not approved, So you cant create supplement post' });
+            return res.status(400).json({ message: 'Admin is not approved' });
         }
 
         // Check if supplement is exist or not
-        let supplement = await supplement.findById(supplementPostId);
-        if (!supplement) {
+        let Supplement = await supplement.findById(supplementPostId);
+        if (!Supplement) {
             return res.status(404).json({ message: 'Supplement post not found' });
         }
 
         // Update supplement image
         let update_supplementImage = await supplement.findByIdAndUpdate(
             supplementPostId,
-            { $set: { supplementImage: supplementImage } },
+            { $set: { SupplementImage: SupplementImage } },
             { new: true }
         );
 
@@ -341,15 +341,15 @@ exports.Supplement_Update_Image = async (req, res) => {
 
 exports.Supplement_Get_Details_By_Supplement_Id = async (req, res) => {
     try {
-        const { supplementId } = req.params;
+        const { supplementPostId } = req.params;
 
         // Check if supplement is exist or not
-        let supplement = await supplement.findById(supplementId);
-        if (!supplement) {
-            return res.status(404).json({ message: 'Supplement not found' });
+        let Supplement = await supplement.findById(supplementPostId);
+        if (!Supplement) {
+            return res.status(404).json({ message: 'Supplement post not found' });
         }
 
-        res.status(200).json({ message: 'Supplement details found successfully', supplement });
+        res.status(200).json({ message: 'Supplement post details found successfully', Supplement });
     } catch (error) {
         res.status(500).json({ message: 'Server Error', error: error.message });
     }
@@ -359,13 +359,13 @@ exports.Supplement_Get_Details_By_Supplement_Id = async (req, res) => {
 
 exports.Supplement_Get_All = async (req, res) => {
     try {
-        let supplement = await supplement.find();
+        let Supplement = await supplement.find();
 
-        if (!supplement) {
-            return res.status(404).json({ message: 'Supplement not found' });
+        if (!Supplement) {
+            return res.status(404).json({ message: 'Supplement posts not found' });
         }
 
-        res.status(200).json({ message: 'Supplement details found successfully', supplement });
+        res.status(200).json({ message: 'Supplement posts details found successfully', Supplement });
     } catch (error) {
         res.status(500).json({ message: 'Server Error', error: error.message });
     }
@@ -383,12 +383,12 @@ exports.Supplement_Delete = async (req, res) => {
         }
 
         if (!admin.Approve) {
-            return res.status(400).json({ message: 'Admin is not approved, So you cant create supplement post' });
+            return res.status(400).json({ message: 'Admin is not approved' });
         }
 
         // Check if supplement is exist or not
-        let supplement = await supplement.findById(supplementPostId);
-        if (!supplement) {
+        let Supplement = await supplement.findById(supplementPostId);
+        if (!Supplement) {
             return res.status(404).json({ message: 'Supplement post not found' });
         }
 
@@ -405,50 +405,68 @@ exports.Supplement_Delete = async (req, res) => {
     }
 };
 
-// --- 12.   Buy Supplement -- //
+// --- 12. Get Supplement Price By Supplement Id -- //
+
+exports.Supplement_Price_By_Supplement_Id = async (req, res) => {
+    try {
+        const { supplementPostId } = req.params;
+
+        // Check if supplement is exist or not
+        let Supplement = await supplement.findById(supplementPostId);
+        if (!Supplement) {
+            return res.status(404).json({ message: 'Supplement not found' });
+        }
+
+        res.status(200).json({ message: 'Supplement price by supplement id found successfully', SupplementPrice: Supplement.SupplementPrice });
+    } catch (error) {
+        res.status(500).json({ message: 'Server Error', error: error.message });
+    }
+};
+
+// --- 13. Buy Supplement -- //
 
 exports.Supplement_Buy = async (req, res) => {
     try {
         const { supplementPostId } = req.params;
-        const { CradNumber, ExpiryDate, CVV, Amount } = req.body;
+        const { CradNumber, ExpiryDate, CVV, Amount, Quantity } = req.body;
 
         // Check if supplement is exist or not
-        let supplement = await supplement.findById(supplementPostId);
-        if (!supplement) {
+        let Supplement = await supplement.findById(supplementPostId);
+        if (!Supplement) {
             return res.status(404).json({ message: 'Supplement not found' });
         }
 
         // Check supplement available
-        if (!supplement.supplementAvailable) {
+        if (!Supplement.SupplementAvailable) {
             return res.status(404).json({ message: 'Supplement not available' });
         }
 
         // Check supplement stock
-        if (supplement.supplementStock == 0) {
+        if (Supplement.SupplementStock == 0) {
             return res.status(404).json({ message: 'Supplement stock is 0' });
         }
 
-        // Check Card  Details
-        if (!CradNumber == 1234123412341234) {
+        // Check Card Details
+        if (CradNumber !== 1234123412341234) {
             return res.status(404).json({ message: 'Invalid Card Number' });
         }
 
-        if (!ExpiryDate == 12 / 2024) {
+        if (ExpiryDate !== "12/26") {
             return res.status(404).json({ message: 'Invalid Expiry Date' });
         }
 
-        if (!CVV == 123) {
+        if (CVV !== 123) {
             return res.status(404).json({ message: 'Invalid CVV' });
         }
 
-        if (!Amount == supplement.SupplementPrice) {
+        if (Amount !== Supplement.SupplementPrice * Quantity) {
             return res.status(404).json({ message: 'Invalid Amount' });
         }
 
         // Update supplement stock
         let update_supplementStock = await supplement.findByIdAndUpdate(
             supplementPostId,
-            { $set: { supplementStock: supplement.supplementStock - 1 } },
+            { $set: { SupplementStock: Supplement.SupplementStock - Quantity } },
             { new: true }
         );
 
@@ -457,10 +475,10 @@ exports.Supplement_Buy = async (req, res) => {
         }
 
         // Update supplement available
-        if (supplement.supplementStock == 0) {
+        if (Supplement.SupplementStock == 0) {
             let update_supplementAvailable = await supplement.findByIdAndUpdate(
                 supplementPostId,
-                { $set: { supplementAvailable: false } },
+                { $set: { SupplementAvailable: false } },
                 { new: true }
             );
 
@@ -469,8 +487,11 @@ exports.Supplement_Buy = async (req, res) => {
             }
         }
 
-        res.status(200).json({ message: 'Supplement stock updated successfully', update_supplementStock });
+        let updated_supplement = await supplement.findById(supplementPostId);
+
+        res.status(200).json({ message: 'Supplement bought successfully', updated_supplement });
     } catch (error) {
         res.status(500).json({ message: 'Server Error', error: error.message });
     }
 };
+

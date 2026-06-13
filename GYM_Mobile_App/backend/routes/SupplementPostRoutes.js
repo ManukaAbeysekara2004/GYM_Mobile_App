@@ -13,6 +13,7 @@ router.patch('/supplement-post-update-image/:supplementPostId/:adminId', Supplem
 router.get('/supplement-post-get-by-id/:supplementPostId', SupplementPostController.Supplement_Get_Details_By_Supplement_Id);
 router.get('/supplement-post-get-all', SupplementPostController.Supplement_Get_All);
 router.delete('/supplement-post-delete/:supplementPostId/:adminId', SupplementPostController.Supplement_Delete);
+router.get('/supplement-price-by-supplement-id/:supplementPostId', SupplementPostController.Supplement_Price_By_Supplement_Id);
 router.patch('/supplement-buy/:supplementPostId', SupplementPostController.Supplement_Buy);
 
 module.exports = router;    

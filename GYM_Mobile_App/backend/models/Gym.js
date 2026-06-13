@@ -27,7 +27,6 @@ const gymSchema = new mongoose.Schema({
     GymOwnerContactNumber: {
         type: String,
         required: true,
-        unique: true,
     },
     GymType: {
         type: String,

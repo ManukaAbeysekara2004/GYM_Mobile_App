@@ -10,12 +10,12 @@ exports.createGymPost = async (req, res) => {
         const { gymInfotmation, gymFasilities, openHours, closeHours, gymContactNumber, city, packages, gymImg } = req.body;
 
         // Check if the Gym ID is registered 
-        let Gym = await Gym.findById(gymId);
-        if (!Gym) {
+        let gym = await Gym.findById(gymId);
+        if (!gym) {
             return res.status(400).json({ message: 'Gym not found' });
         }
 
-        if (!Gym.Approve) {
+        if (!gym.Approve) {
             return res.status(400).json({ message: 'Gym is not approved, So you cant create Gym post' });
         }
 
@@ -171,6 +171,11 @@ exports.updateGymPostContactNumber = async (req, res) => {
         const { gymPostId } = req.params;
         const { newContactNumber } = req.body;
 
+        // Check contact number has 10 degites 
+        if (newContactNumber.length !== 10) {
+            return res.status(400).json({ message: 'Contact number must be 10 degites' });
+        }
+
         // Update contact number in database
         let gymPost = await GymPost.findByIdAndUpdate(
             gymPostId,
@@ -321,7 +326,7 @@ exports.deleteGymPost = async (req, res) => {
 
 // --- 13. Get Gym Post Details by GymPost ID--- //
 
-exports.getGymPostDetailsByGymPostId = async (req, res) => {
+exports.getGymPostByGymPostId = async (req, res) => {
     try {
         const { gymPostId } = req.params;
 

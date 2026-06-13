@@ -10,6 +10,18 @@ exports.Gym_Registration = async (req, res) => {
     try {
         const { GymName, GymOwnerName, GymOwnerNIC, GymID, GymAddress, GymOwnerContactNumber, GymType, Email, Password, ConfirmPassword, GymLogo } = req.body;
 
+        // Ckeck If Gym Name is already registered 
+        let gymname = await Gym.findOne({ GymName });
+        if (gymname) {
+            return res.status(400).json({ message: 'Gym name already registered' });
+        }
+
+        // Ckeck If Gym Owner NIC is already registered 
+        let gymownerNIC = await Gym.findOne({ GymOwnerNIC });
+        if (gymownerNIC) {
+            return res.status(400).json({ message: 'Gym Owner NIC already registered' });
+        }
+
         // Check if GymID is already registered
         let gym = await Gym.findOne({ GymID });
         if (gym) {

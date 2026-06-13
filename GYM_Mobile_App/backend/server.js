@@ -28,6 +28,7 @@ app.use('/api/coachposts', require('./routes/CoachPostRoutes'));
 app.use('/api/gym-posts', require('./routes/GymPostRoutes'));
 app.use('/api/supplements', require('./routes/SupplementPostRoutes'));
 app.use('/api/review', require('./routes/ReviewAndRatingRoutes'));
+app.use('/api/ai-Model', require('./routes/AIModelRoutes'));
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));

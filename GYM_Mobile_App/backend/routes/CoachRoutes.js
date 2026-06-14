@@ -7,7 +7,7 @@ router.post('/coach-login', CoachController.Coach_Login);
 router.patch('/coach-update-contact-number/:coachId', CoachController.Coach_UpdateContactNumber);
 router.patch('/coach-update-password/:coachId', CoachController.Coach_UpdatePassword);
 router.patch('/coach-update-dp/:coachId', CoachController.Coach_UpdateDP);
-router.get('/coach-role', CoachController.Coach_Role);
+router.post('/coach-role', CoachController.Coach_Role);
 router.get('/coach-details/:coachId', CoachController.Coach_Details);
 router.delete('/coach-delete/:coachId', CoachController.Coach_Delete);
 

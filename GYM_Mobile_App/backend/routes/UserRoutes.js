@@ -7,7 +7,7 @@ router.post('/user-login', UserController.User_Login);
 router.patch('/user-update-contactnumber/:userId', UserController.User_UpdateContactNumber);
 router.patch('/user-update-password/:userId', UserController.User_UpdatePassword);
 router.patch('/user-update-dp/:userId', UserController.User_UpdateDP);
-router.get('/user-role', UserController.User_Role);
+router.post('/user-role', UserController.User_Role);
 router.get('/user-details/:userId', UserController.User_Details);
 router.delete('/user-delete/:userId', UserController.User_Detele);
 

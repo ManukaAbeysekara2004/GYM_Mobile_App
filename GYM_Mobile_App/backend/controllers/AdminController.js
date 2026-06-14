@@ -267,3 +267,22 @@ exports.Admin_Delete = async (req, res) => {
         res.status(500).json({ message: 'Server Error', error: error.message });
     }
 };
+
+
+// --- 09. Get Admin Approval Status --- //
+
+exports.Admin_GetAdminApprovalStatus = async (req, res) => {
+    try {
+        const { adminId } = req.params;
+
+        // Check if admin is exist or not
+        let admin = await Admin.findById(adminId);
+        if (!admin) {
+            return res.status(404).json({ message: 'Admin not found' });
+        }
+
+        res.status(200).json({ approvalStatus: admin.Approve });
+    } catch (error) {
+        res.status(500).json({ message: 'Server Error', error: error.message });
+    }
+};

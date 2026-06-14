@@ -10,5 +10,6 @@ router.patch('/gym-update-gym-logo/:gymId', GymController.Gym_UpdateLogo);
 router.post('/gym-role', GymController.Gym_Role);
 router.get('/gym-details/:gymId', GymController.Gym_Details);
 router.delete('/gym-delete/:gymId', GymController.Gym_Delete);
+router.get('/gym-get-approval-status/:gymId', GymController.Gym_GetGymApprovalStatus);
 
 module.exports = router;    

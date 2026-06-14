@@ -16,6 +16,7 @@ import {
 import { useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { Ionicons } from '@expo/vector-icons';
+import { Session } from '../constants/Session';
 
 /* ── Backend Config ── */
 const BACKEND_URL = 'http://192.168.1.5:5000';
@@ -131,13 +132,33 @@ export default function LoginScreen() {
 
             // Perform Role-Based Navigation
             if (retrievedRole === 'User') {
-              router.push('/userpage');
+              const loggedInUser = successResult.data?.user;
+              if (loggedInUser) {
+                Session.setUserId(loggedInUser._id);
+                Session.setUserEmail(loggedInUser.Email);
+              }
+              router.push({ pathname: '/userpage', params: { userId: loggedInUser?._id } } as any);
             } else if (retrievedRole === 'Gym') {
-              router.push('/gympage');
+              const loggedInGym = successResult.data?.gym;
+              if (loggedInGym) {
+                Session.setUserId(loggedInGym._id);
+                Session.setUserEmail(loggedInGym.Email);
+              }
+              router.push({ pathname: '/gympage', params: { userId: loggedInGym?._id } } as any);
             } else if (retrievedRole === 'Coach') {
-              router.push('/coachpage');
+              const loggedInCoach = successResult.data?.coach;
+              if (loggedInCoach) {
+                Session.setUserId(loggedInCoach._id);
+                Session.setUserEmail(loggedInCoach.Email);
+              }
+              router.push({ pathname: '/coachpage', params: { userId: loggedInCoach?._id } } as any);
             } else if (retrievedRole === 'Admin') {
-              router.push('/adminpage');
+              const loggedInAdmin = successResult.data?.admin;
+              if (loggedInAdmin) {
+                Session.setUserId(loggedInAdmin._id);
+                Session.setUserEmail(loggedInAdmin.Email);
+              }
+              router.push({ pathname: '/adminpage', params: { userId: loggedInAdmin?._id } } as any);
             } else {
               showPopup('Role Error', `Unknown user role: ${retrievedRole}`, 'error');
             }
@@ -288,21 +309,10 @@ export default function LoginScreen() {
       >
         <View style={styles.modalOverlay}>
           <View style={styles.modalCard}>
-            {popup.type === 'error' && popup.title !== 'Login Failed' && (
-              <View style={[styles.modalIconCircle, styles.modalIconError]}>
-                <Ionicons name="close-circle-outline" size={36} color="#FFFFFF" />
-              </View>
-            )}
-            {popup.title !== 'Login Failed' && (
-              <Text style={styles.modalTitle}>{popup.title}</Text>
-            )}
             <Text style={styles.modalMessage}>{popup.message}</Text>
 
             <TouchableOpacity
-              style={[
-                styles.modalButton,
-                popup.type === 'error' && styles.modalButtonError,
-              ]}
+              style={styles.modalButton}
               onPress={dismissPopup}
               activeOpacity={0.85}
             >

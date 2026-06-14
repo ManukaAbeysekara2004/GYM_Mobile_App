@@ -10,5 +10,6 @@ router.patch('/user-update-dp/:userId', UserController.User_UpdateDP);
 router.post('/user-role', UserController.User_Role);
 router.get('/user-details/:userId', UserController.User_Details);
 router.delete('/user-delete/:userId', UserController.User_Detele);
+router.get('/user-get-approval-status/:userId', UserController.User_GetUserApprovalStatus);
 
 module.exports = router;

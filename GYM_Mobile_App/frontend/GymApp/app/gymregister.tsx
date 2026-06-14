@@ -554,11 +554,7 @@ export default function GymRegisterScreen() {
             <Text style={styles.modalMessage}>{popup.message}</Text>
 
             <TouchableOpacity
-              style={[
-                styles.modalButton,
-                popup.type === 'success' && styles.modalButtonSuccess,
-                popup.type === 'error' && styles.modalButtonError,
-              ]}
+              style={styles.modalButton}
               onPress={dismissPopup}
               activeOpacity={0.85}
             >

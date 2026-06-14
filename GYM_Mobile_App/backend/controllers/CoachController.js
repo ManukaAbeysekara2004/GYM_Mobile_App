@@ -281,3 +281,21 @@ exports.Coach_Delete = async (req, res) => {
         res.status(500).json({ message: 'Server Error', error: error.message });
     }
 };
+
+// --- 09. Get Coach Approval Status --- //
+
+exports.Coach_GetCoachApprovalStatus = async (req, res) => {
+    try {
+        const { coachId } = req.params;
+
+        // Check if coach is exist or not
+        let coach = await Coach.findById(coachId);
+        if (!coach) {
+            return res.status(404).json({ message: 'Coach not found' });
+        }
+
+        res.status(200).json({ approvalStatus: coach.Approve });
+    } catch (error) {
+        res.status(500).json({ message: 'Server Error', error: error.message });
+    }
+};

@@ -281,3 +281,22 @@ exports.Gym_Delete = async (req, res) => {
         res.status(500).json({ message: 'Server Error', error: error.message });
     }
 };
+
+
+// --- 09. Get Gym Approval Status --- //
+
+exports.Gym_GetGymApprovalStatus = async (req, res) => {
+    try {
+        const { gymId } = req.params;
+
+        // Check if gym is exist or not
+        let gym = await Gym.findById(gymId);
+        if (!gym) {
+            return res.status(404).json({ message: 'Gym not found' });
+        }
+
+        res.status(200).json({ approvalStatus: gym.Approve });
+    } catch (error) {
+        res.status(500).json({ message: 'Server Error', error: error.message });
+    }
+};

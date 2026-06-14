@@ -10,5 +10,6 @@ router.patch('/coach-update-dp/:coachId', CoachController.Coach_UpdateDP);
 router.post('/coach-role', CoachController.Coach_Role);
 router.get('/coach-details/:coachId', CoachController.Coach_Details);
 router.delete('/coach-delete/:coachId', CoachController.Coach_Delete);
+router.get('/coach-get-approval-status/:coachId', CoachController.Coach_GetCoachApprovalStatus);
 
 module.exports = router;

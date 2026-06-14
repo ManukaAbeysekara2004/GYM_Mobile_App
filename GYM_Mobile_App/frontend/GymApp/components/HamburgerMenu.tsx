@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -9,10 +9,12 @@ import {
   Platform,
   ScrollView,
 } from 'react-native';
-import { useRouter } from 'expo-router';
+import { useRouter, usePathname } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
+import { Session } from '../constants/Session';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
+const BACKEND_URL = 'http://192.168.1.5:5000';
 
 interface HamburgerMenuProps {
   currentRole: 'User' | 'Gym' | 'Coach' | 'Admin';
@@ -20,7 +22,43 @@ interface HamburgerMenuProps {
 
 export default function HamburgerMenu({ currentRole }: HamburgerMenuProps) {
   const router = useRouter();
+  const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [approvalStatus, setApprovalStatus] = useState<boolean | null>(null);
+
+  const fetchApprovalStatus = async () => {
+    const userId = Session.getUserId();
+    if (!userId) return;
+
+    let endpoint = '';
+    if (currentRole === 'User') {
+      endpoint = `${BACKEND_URL}/api/user/user-get-approval-status/${userId}`;
+    } else if (currentRole === 'Gym') {
+      endpoint = `${BACKEND_URL}/api/gym/gym-get-approval-status/${userId}`;
+    } else if (currentRole === 'Coach') {
+      endpoint = `${BACKEND_URL}/api/coach/coach-get-approval-status/${userId}`;
+    } else if (currentRole === 'Admin') {
+      endpoint = `${BACKEND_URL}/api/admin/admin-get-approval-status/${userId}`;
+    }
+
+    if (!endpoint) return;
+
+    try {
+      const res = await fetch(endpoint);
+      const data = await res.json();
+      if (res.status === 200 && data.approvalStatus !== undefined) {
+        setApprovalStatus(data.approvalStatus);
+      }
+    } catch (err) {
+      console.error('Failed to fetch approval status:', err);
+    }
+  };
+
+  useEffect(() => {
+    if (menuOpen) {
+      fetchApprovalStatus();
+    }
+  }, [menuOpen]);
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
@@ -28,15 +66,27 @@ export default function HamburgerMenu({ currentRole }: HamburgerMenuProps) {
 
   const handleNavigate = (route: string) => {
     setMenuOpen(false);
+
+    // Prevent navigation blinking if we are already on that page
+    if (pathname === route ||
+      (route === '/userpage' && pathname === '/userpage') ||
+      (route === '/gympage' && pathname === '/gympage') ||
+      (route === '/coachpage' && pathname === '/coachpage') ||
+      (route === '/adminpage' && pathname === '/adminpage')) {
+      return;
+    }
+
     // Use setTimeout to ensure the modal closes before navigation starts, for smooth UX
     setTimeout(() => {
-      if (
-        route === '/userpage' ||
-        route === '/gympage' ||
-        route === '/coachpage' ||
-        route === '/adminpage' ||
-        route === '/login'
-      ) {
+      if (route === '/userpage') {
+        router.push({ pathname: '/userpage', params: { userId: Session.getUserId() || '' } } as any);
+      } else if (route === '/gympage') {
+        router.push({ pathname: '/gympage', params: { userId: Session.getUserId() || '' } } as any);
+      } else if (route === '/coachpage') {
+        router.push({ pathname: '/coachpage', params: { userId: Session.getUserId() || '' } } as any);
+      } else if (route === '/adminpage') {
+        router.push({ pathname: '/adminpage', params: { userId: Session.getUserId() || '' } } as any);
+      } else if (route === '/login') {
         router.push(route as any);
       } else {
         router.push({ pathname: route, params: { role: currentRole } } as any);
@@ -94,7 +144,7 @@ export default function HamburgerMenu({ currentRole }: HamburgerMenuProps) {
           <TouchableOpacity
             style={styles.sidebar}
             activeOpacity={1}
-            onPress={() => {}}
+            onPress={() => { }}
           >
             {/* Sidebar Header */}
             <View style={styles.header}>
@@ -102,13 +152,23 @@ export default function HamburgerMenu({ currentRole }: HamburgerMenuProps) {
                 <Ionicons name="shield-checkmark" size={16} color="#3B82F6" />
                 <Text style={styles.roleTagText}>{currentRole}</Text>
               </View>
-              <TouchableOpacity
-                style={styles.closeButton}
-                onPress={toggleMenu}
-                activeOpacity={0.7}
-              >
-                <Ionicons name="close" size={24} color="#FFFFFF" />
-              </TouchableOpacity>
+
+              <View style={styles.headerRight}>
+                {approvalStatus !== null && (
+                  <View style={[styles.statusBadge, approvalStatus ? styles.approvedBadge : styles.pendingBadge]}>
+                    <Text style={[styles.statusBadgeText, approvalStatus ? styles.approvedBadgeText : styles.pendingBadgeText]}>
+                      {approvalStatus ? 'Approved' : 'Pending'}
+                    </Text>
+                  </View>
+                )}
+                <TouchableOpacity
+                  style={styles.closeButton}
+                  onPress={toggleMenu}
+                  activeOpacity={0.7}
+                >
+                  <Ionicons name="close" size={24} color="#FFFFFF" />
+                </TouchableOpacity>
+              </View>
             </View>
 
             {/* Sidebar Scroll Items */}
@@ -354,5 +414,38 @@ const styles = StyleSheet.create({
   },
   logoutText: {
     color: '#EF4444',
+  },
+  headerRight: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
+  statusBadge: {
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderRadius: 8,
+    borderWidth: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  statusBadgeText: {
+    fontSize: 11,
+    fontWeight: '800',
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
+  },
+  approvedBadge: {
+    backgroundColor: 'rgba(34, 197, 94, 0.12)',
+    borderColor: 'rgba(34, 197, 94, 0.35)',
+  },
+  approvedBadgeText: {
+    color: '#22C55E',
+  },
+  pendingBadge: {
+    backgroundColor: 'rgba(249, 115, 22, 0.12)',
+    borderColor: 'rgba(249, 115, 22, 0.35)',
+  },
+  pendingBadgeText: {
+    color: '#F97316',
   },
 });

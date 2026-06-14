@@ -10,5 +10,6 @@ router.patch('/admin-update-dp/:adminId', AdminController.Admin_UpdateDP);
 router.post('/admin-role', AdminController.Admin_Role);
 router.get('/admin-details/:adminId', AdminController.Admin_Details);
 router.delete('/admin-delete/:adminId', AdminController.Admin_Delete);
+router.get('/admin-get-approval-status/:adminId', AdminController.Admin_GetAdminApprovalStatus);
 
 module.exports = router;

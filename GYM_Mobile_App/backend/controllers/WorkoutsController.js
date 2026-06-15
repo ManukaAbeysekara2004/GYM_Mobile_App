@@ -161,7 +161,7 @@ exports.User_Workout_UpdateDuration = async (req, res) => {
 };
 
 
-// --- Delete Workout -- //
+// --- 06. Delete Workout -- //
 
 exports.User_Workout_Delete = async (req, res) => {
     try {

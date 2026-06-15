@@ -225,7 +225,7 @@ export default function HamburgerMenu({ currentRole }: HamburgerMenuProps) {
                 activeOpacity={0.7}
               >
                 <View style={styles.menuItemLeft}>
-                  <Ionicons name="leaf-outline" size={22} color="#AAAAAA" />
+                  <Text style={{ fontSize: 22 }}>🫙</Text>
                   <Text style={styles.menuItemText}>Supplements</Text>
                 </View>
                 <Ionicons name="chevron-forward" size={16} color="#555555" />

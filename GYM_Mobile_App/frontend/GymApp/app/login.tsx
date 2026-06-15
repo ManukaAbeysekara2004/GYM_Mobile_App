@@ -29,6 +29,7 @@ export default function LoginScreen() {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoggingIn, setIsLoggingIn] = useState(false);
   const [keyboardOpen, setKeyboardOpen] = useState(false);
+  const [isUnapprovedAdmin, setIsUnapprovedAdmin] = useState(false);
   const [popup, setPopup] = useState<{ visible: boolean; title: string; message: string; type: 'error' | 'success' | 'info' }>({
     visible: false, title: '', message: '', type: 'info',
   });
@@ -39,6 +40,11 @@ export default function LoginScreen() {
 
   const dismissPopup = () => {
     setPopup({ visible: false, title: '', message: '', type: 'info' });
+    if (isUnapprovedAdmin) {
+      setEmail('');
+      setPassword('');
+      setIsUnapprovedAdmin(false);
+    }
   };
 
   useEffect(() => {
@@ -112,6 +118,17 @@ export default function LoginScreen() {
       });
 
       const results = await Promise.all(loginPromises);
+
+      // Check if Admin endpoint returned unapproved error
+      const unapprovedAdminResult = results.find(
+        r => r.endpoint.roleName === 'Admin' && r.status === 400 && r.data?.message === 'Admin is not approved yet'
+      );
+
+      if (unapprovedAdminResult) {
+        setIsUnapprovedAdmin(true);
+        showPopup('Approval Pending', 'Admin is not approved yet', 'error');
+        return;
+      }
 
       // Find successful authentication
       const successResult = results.find(r => r.status === 200);

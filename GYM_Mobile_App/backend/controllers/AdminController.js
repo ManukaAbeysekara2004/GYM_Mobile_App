@@ -74,6 +74,11 @@ exports.Admin_Login = async (req, res) => {
             return res.status(400).json({ message: 'Invalid password' });
         }
 
+        // Check Admin is Approve or not 
+        if (!admin.Approve) {
+            return res.status(400).json({ message: 'Admin is not approved yet' });
+        }
+
         res.status(200).json({ message: 'Login successfully', admin });
     } catch (error) {
         res.status(500).json({ message: 'Server Error', error: error.message });

@@ -12,13 +12,14 @@ exports.predictCalories = async (req, res) => {
         const { Age, Gender, Weight, Height, Hours, mins, Workout_Type_HIIT, Workout_Type_Strength, Workout_Type_Yoga } = req.body;
 
         let Session_Duration = Hours + (mins / 60)
+        let Height_m = Height / 100
 
         // Send the data to the FastAPI server
         const response = await axios.post(`${FASTAPI_BASE_URL}/predict/calories`, {
             Age: Number(Age),
             Gender: Number(Gender),
             Weight: Number(Weight),
-            Height: Number(Height),
+            Height: Number(Height_m),
             Session_Duration: Number(Session_Duration),
             Workout_Type_HIIT: Number(Workout_Type_HIIT),
             Workout_Type_Strength: Number(Workout_Type_Strength),

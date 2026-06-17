@@ -8,5 +8,7 @@ router.patch('/user-workout-update-reps/:userId/:workoutId', WorkoutsController.
 router.patch('/user-workout-update-weight/:userId/:workoutId', WorkoutsController.User_Workout_UpdateWeight);
 router.patch('/user-workout-update-duration/:userId/:workoutId', WorkoutsController.User_Workout_UpdateDuration);
 router.delete('/user-workout-delete/:userId/:workoutId', WorkoutsController.User_Workout_Delete);
+router.get('/user-workout-get-details/:userId/:workoutId', WorkoutsController.User_Workout_GetDetails);
+router.get('/user-workout-get-all-details/:userId', WorkoutsController.User_Workout_GetAllDetails);
 
 module.exports = router;

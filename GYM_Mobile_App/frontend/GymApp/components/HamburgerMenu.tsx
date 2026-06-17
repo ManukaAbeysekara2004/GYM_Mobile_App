@@ -10,7 +10,7 @@ import {
   ScrollView,
 } from 'react-native';
 import { useRouter, usePathname } from 'expo-router';
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { Session } from '../constants/Session';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
@@ -225,7 +225,7 @@ export default function HamburgerMenu({ currentRole }: HamburgerMenuProps) {
                 activeOpacity={0.7}
               >
                 <View style={styles.menuItemLeft}>
-                  <Text style={{ fontSize: 22 }}>🫙</Text>
+                  <Ionicons name="flask-outline" size={22} color="#AAAAAA" />
                   <Text style={styles.menuItemText}>Supplements</Text>
                 </View>
                 <Ionicons name="chevron-forward" size={16} color="#555555" />
@@ -239,7 +239,7 @@ export default function HamburgerMenu({ currentRole }: HamburgerMenuProps) {
                   activeOpacity={0.7}
                 >
                   <View style={styles.menuItemLeft}>
-                    <Ionicons name="fitness-outline" size={22} color="#AAAAAA" />
+                    <MaterialCommunityIcons name="arm-flex-outline" size={22} color="#AAAAAA" />
                     <Text style={styles.menuItemText}>Workouts</Text>
                   </View>
                   <Ionicons name="chevron-forward" size={16} color="#555555" />

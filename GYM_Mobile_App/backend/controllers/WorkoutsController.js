@@ -188,3 +188,48 @@ exports.User_Workout_Delete = async (req, res) => {
         res.status(500).json({ message: 'Server Error', error: error.message });
     }
 };
+
+// --- 07. Get workout details -- //
+
+exports.User_Workout_GetDetails = async (req, res) => {
+    try {
+        const { userId, workoutId } = req.params;
+
+        let user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        let workout = user.Workouts.id(workoutId);
+        if (!workout) {
+            return res.status(404).json({ message: 'Workout not found' });
+        }
+
+        res.status(200).json({ message: 'Workout details fetched successfully', workout });
+    } catch (error) {
+        res.status(500).json({ message: 'Server Error', error: error.message });
+    }
+};
+
+
+// --- 08. Get all workout details -- //
+
+exports.User_Workout_GetAllDetails = async (req, res) => {
+    try {
+        const { userId } = req.params;
+
+        let user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        let workouts = user.Workouts;
+        if (!workouts) {
+            return res.status(404).json({ message: 'Workouts not found' });
+        }
+
+        res.status(200).json({ message: 'Workouts details fetched successfully', workouts });
+    } catch (error) {
+        res.status(500).json({ message: 'Server Error', error: error.message });
+    }
+};

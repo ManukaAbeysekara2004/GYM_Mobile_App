@@ -187,7 +187,7 @@ exports.AdminManage_SortUpToApproveFalesUsers = async (req, res) => {
             return res.status(404).json({ message: 'Users not found' });
         }
 
-        users.sort((b, a) => b.Approve - a.Approve);
+        users.sort((a, b) => b.Approve - a.Approve);
 
         res.status(200).json({ message: 'Users sorted', users });
     } catch (error) {
@@ -205,7 +205,7 @@ exports.AdminManage_SortUpToApproveFalesGyms = async (req, res) => {
             return res.status(404).json({ message: 'Gyms not found' });
         }
 
-        gyms.sort((b, a) => b.Approve - a.Approve);
+        gyms.sort((a, b) => b.Approve - a.Approve);
 
         res.status(200).json({ message: 'Gyms sorted', gyms });
     } catch (error) {
@@ -223,7 +223,7 @@ exports.AdminManage_SortUpToApproveFalesCoaches = async (req, res) => {
             return res.status(404).json({ message: 'Coaches not found' });
         }
 
-        coaches.sort((b, a) => b.Approve - a.Approve);
+        coaches.sort((a, b) => b.Approve - a.Approve);
 
         res.status(200).json({ message: 'Coaches sorted', coaches });
     } catch (error) {
@@ -241,7 +241,7 @@ exports.AdminManage_SortUpToApproveFalesAdmins = async (req, res) => {
             return res.status(404).json({ message: 'Admins not found' });
         }
 
-        admins.sort((b, a) => b.Approve - a.Approve);
+        admins.sort((a, b) => b.Approve - a.Approve);
 
         res.status(200).json({ message: 'Admins sorted', admins });
     } catch (error) {
@@ -266,7 +266,7 @@ exports.AdminManage_DeleteUser = async (req, res) => {
             return res.status(404).json({ message: 'User not found' });
         }
 
-        await user.remove();
+        await user.deleteOne();
 
         res.status(200).json({ message: 'User deleted', user });
     } catch (error) {
@@ -291,7 +291,7 @@ exports.AdminManage_DeleteGym = async (req, res) => {
             return res.status(404).json({ message: 'Gym not found' });
         }
 
-        await gym.remove();
+        await gym.deleteOne();
 
         res.status(200).json({ message: 'Gym deleted', gym });
     } catch (error) {
@@ -316,7 +316,7 @@ exports.AdminManage_DeleteCoach = async (req, res) => {
             return res.status(404).json({ message: 'Coach not found' });
         }
 
-        await coach.remove();
+        await coach.deleteOne();
 
         res.status(200).json({ message: 'Coach deleted', coach });
     } catch (error) {
@@ -341,7 +341,7 @@ exports.AdminManage_DeleteAdmin = async (req, res) => {
             return res.status(404).json({ message: 'Admin not found' });
         }
 
-        await admin.remove();
+        await admin.deleteOne();
 
         res.status(200).json({ message: 'Admin deleted', admin });
     } catch (error) {

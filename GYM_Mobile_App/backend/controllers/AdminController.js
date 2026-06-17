@@ -230,12 +230,12 @@ exports.Admin_Details = async (req, res) => {
         const { adminId } = req.params;
 
         // Check if admin is exist or not
-        let admin = await Admin.findById(adminId);
+        let admin = await Admin.findById(adminId).select('-Password');
         if (!admin) {
             return res.status(404).json({ message: 'Admin not found' });
         }
 
-        res.status(200).json({ admin }).select('-Password');
+        res.status(200).json({ admin });
     } catch (error) {
         res.status(500).json({ message: 'Server Error', error: error.message });
     }

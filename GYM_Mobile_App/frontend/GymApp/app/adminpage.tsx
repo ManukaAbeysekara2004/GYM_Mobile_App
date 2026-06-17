@@ -472,6 +472,79 @@ export default function AdminProfileScreen() {
             </TouchableOpacity>
           </View>
 
+          {/* ── Admin Management Section ── */}
+          <View style={styles.managementContainer}>
+            <Text style={styles.managementSectionTitle}>Management Controls</Text>
+            
+            <TouchableOpacity
+              style={styles.managementCardButton}
+              onPress={() => router.push({ pathname: '/usermanagement', params: { adminId } })}
+              activeOpacity={0.8}
+            >
+              <View style={styles.managementCardLeft}>
+                <View style={styles.managementIconWrapper}>
+                  <Ionicons name="people-outline" size={24} color={ACCENT} />
+                </View>
+                <View style={styles.managementTextWrapper}>
+                  <Text style={styles.managementCardTitle}>User Management</Text>
+                  <Text style={styles.managementCardSubtitle}>Approve pending users & view details</Text>
+                </View>
+              </View>
+              <Ionicons name="chevron-forward" size={18} color={TEXT_MUTED} />
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.managementCardButton}
+              onPress={() => router.push({ pathname: '/gymmanagement', params: { adminId } })}
+              activeOpacity={0.8}
+            >
+              <View style={styles.managementCardLeft}>
+                <View style={styles.managementIconWrapper}>
+                  <Ionicons name="barbell-outline" size={24} color={ACCENT} />
+                </View>
+                <View style={styles.managementTextWrapper}>
+                  <Text style={styles.managementCardTitle}>Gym Management</Text>
+                  <Text style={styles.managementCardSubtitle}>Verify gym credentials & status</Text>
+                </View>
+              </View>
+              <Ionicons name="chevron-forward" size={18} color={TEXT_MUTED} />
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.managementCardButton}
+              onPress={() => router.push({ pathname: '/coachmanagement', params: { adminId } })}
+              activeOpacity={0.8}
+            >
+              <View style={styles.managementCardLeft}>
+                <View style={styles.managementIconWrapper}>
+                  <Ionicons name="person-add-outline" size={24} color={ACCENT} />
+                </View>
+                <View style={styles.managementTextWrapper}>
+                  <Text style={styles.managementCardTitle}>Coach Management</Text>
+                  <Text style={styles.managementCardSubtitle}>Verify coach credentials & status</Text>
+                </View>
+              </View>
+              <Ionicons name="chevron-forward" size={18} color={TEXT_MUTED} />
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.managementCardButton}
+              onPress={() => router.push({ pathname: '/adminmanagement', params: { adminId } })}
+              activeOpacity={0.8}
+            >
+              <View style={styles.managementCardLeft}>
+                <View style={styles.managementIconWrapper}>
+                  <Ionicons name="shield-half-outline" size={24} color={ACCENT} />
+                </View>
+                <View style={styles.managementTextWrapper}>
+                  <Text style={styles.managementCardTitle}>Admin Management</Text>
+                  <Text style={styles.managementCardSubtitle}>Manage administrator permissions</Text>
+                </View>
+              </View>
+              <Ionicons name="chevron-forward" size={18} color={TEXT_MUTED} />
+            </TouchableOpacity>
+          </View>
+
           {/* ── Delete Account Button ── */}
           <TouchableOpacity
             style={styles.deleteButton}
@@ -1046,5 +1119,60 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: TEXT_PRIMARY,
     letterSpacing: 0.5,
+  },
+  managementContainer: {
+    width: '100%',
+    marginBottom: 28,
+    gap: 12,
+  },
+  managementSectionTitle: {
+    fontSize: 14,
+    fontWeight: '800',
+    color: TEXT_PRIMARY,
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
+    marginBottom: 4,
+    paddingLeft: 4,
+  },
+  managementCardButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: CARD,
+    borderRadius: 18,
+    borderWidth: 1,
+    borderColor: BORDER,
+    paddingVertical: 16,
+    paddingHorizontal: 20,
+    width: '100%',
+    minHeight: 80,
+  },
+  managementCardLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 16,
+    flex: 1,
+  },
+  managementIconWrapper: {
+    width: 44,
+    height: 44,
+    borderRadius: 12,
+    backgroundColor: 'rgba(59, 130, 246, 0.1)',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  managementTextWrapper: {
+    flex: 1,
+    justifyContent: 'center',
+  },
+  managementCardTitle: {
+    fontSize: 15,
+    fontWeight: '700',
+    color: TEXT_PRIMARY,
+    marginBottom: 2,
+  },
+  managementCardSubtitle: {
+    fontSize: 12,
+    color: TEXT_SECONDARY,
   },
 });

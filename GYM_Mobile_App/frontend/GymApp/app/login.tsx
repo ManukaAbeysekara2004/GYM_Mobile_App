@@ -174,6 +174,7 @@ export default function LoginScreen() {
               if (loggedInAdmin) {
                 Session.setUserId(loggedInAdmin._id);
                 Session.setUserEmail(loggedInAdmin.Email);
+                Session.setAdminApproved(loggedInAdmin.Approve);
               }
               router.push({ pathname: '/adminpage', params: { userId: loggedInAdmin?._id } } as any);
             } else {

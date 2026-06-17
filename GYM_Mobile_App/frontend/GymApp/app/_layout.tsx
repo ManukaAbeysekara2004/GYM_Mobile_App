@@ -101,6 +101,30 @@ export default function RootLayout() {
             animation: 'fade',
           }}
         />
+        <Stack.Screen
+          name="usermanagement"
+          options={{
+            animation: 'fade',
+          }}
+        />
+        <Stack.Screen
+          name="gymmanagement"
+          options={{
+            animation: 'fade',
+          }}
+        />
+        <Stack.Screen
+          name="coachmanagement"
+          options={{
+            animation: 'fade',
+          }}
+        />
+        <Stack.Screen
+          name="adminmanagement"
+          options={{
+            animation: 'fade',
+          }}
+        />
         <Stack.Screen name="(tabs)" />
         <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
       </Stack>

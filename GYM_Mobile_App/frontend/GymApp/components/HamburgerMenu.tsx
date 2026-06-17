@@ -25,6 +25,7 @@ export default function HamburgerMenu({ currentRole }: HamburgerMenuProps) {
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
   const [approvalStatus, setApprovalStatus] = useState<boolean | null>(null);
+  const [showApprovalAlert, setShowApprovalAlert] = useState(false);
 
   const fetchApprovalStatus = async () => {
     const userId = Session.getUserId();
@@ -55,10 +56,44 @@ export default function HamburgerMenu({ currentRole }: HamburgerMenuProps) {
   };
 
   useEffect(() => {
+    fetchApprovalStatus();
+  }, []);
+
+  useEffect(() => {
     if (menuOpen) {
       fetchApprovalStatus();
     }
   }, [menuOpen]);
+
+  const isRouteRestricted = (route: string) => {
+    const restrictedRoutes = [
+      '/gymzone',
+      '/coaches',
+      '/supplements',
+      '/workouts',
+      '/calorietracker',
+      '/watertracker'
+    ];
+    return restrictedRoutes.includes(route);
+  };
+
+  const handleItemPress = (route: string) => {
+    if (approvalStatus === false && isRouteRestricted(route)) {
+      setShowApprovalAlert(true);
+    } else {
+      handleNavigate(route);
+    }
+  };
+
+  const getMenuItemStyles = (route: string) => {
+    const isRestricted = approvalStatus === false && isRouteRestricted(route);
+    return {
+      container: [styles.menuItem, isRestricted && styles.disabledMenuItem],
+      text: [styles.menuItemText, isRestricted && styles.disabledMenuItemText],
+      iconColor: isRestricted ? '#666666' : '#AAAAAA',
+      chevronColor: isRestricted ? '#333333' : '#555555'
+    };
+  };
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
@@ -182,7 +217,7 @@ export default function HamburgerMenu({ currentRole }: HamburgerMenuProps) {
               {/* 1. Profile */}
               <TouchableOpacity
                 style={styles.menuItem}
-                onPress={() => handleNavigate(getProfileRoute())}
+                onPress={() => handleItemPress(getProfileRoute())}
                 activeOpacity={0.7}
               >
                 <View style={styles.menuItemLeft}>
@@ -194,88 +229,88 @@ export default function HamburgerMenu({ currentRole }: HamburgerMenuProps) {
 
               {/* 2. Gym Zone */}
               <TouchableOpacity
-                style={styles.menuItem}
-                onPress={() => handleNavigate('/gymzone')}
+                style={getMenuItemStyles('/gymzone').container}
+                onPress={() => handleItemPress('/gymzone')}
                 activeOpacity={0.7}
               >
                 <View style={styles.menuItemLeft}>
-                  <Ionicons name="barbell-outline" size={22} color="#AAAAAA" />
-                  <Text style={styles.menuItemText}>Gym Zone</Text>
+                  <Ionicons name="barbell-outline" size={22} color={getMenuItemStyles('/gymzone').iconColor} />
+                  <Text style={getMenuItemStyles('/gymzone').text}>Gym Zone</Text>
                 </View>
-                <Ionicons name="chevron-forward" size={16} color="#555555" />
+                <Ionicons name="chevron-forward" size={16} color={getMenuItemStyles('/gymzone').chevronColor} />
               </TouchableOpacity>
 
               {/* 3. Coaches */}
               <TouchableOpacity
-                style={styles.menuItem}
-                onPress={() => handleNavigate('/coaches')}
+                style={getMenuItemStyles('/coaches').container}
+                onPress={() => handleItemPress('/coaches')}
                 activeOpacity={0.7}
               >
                 <View style={styles.menuItemLeft}>
-                  <Ionicons name="people-outline" size={22} color="#AAAAAA" />
-                  <Text style={styles.menuItemText}>Coaches</Text>
+                  <Ionicons name="people-outline" size={22} color={getMenuItemStyles('/coaches').iconColor} />
+                  <Text style={getMenuItemStyles('/coaches').text}>Coaches</Text>
                 </View>
-                <Ionicons name="chevron-forward" size={16} color="#555555" />
+                <Ionicons name="chevron-forward" size={16} color={getMenuItemStyles('/coaches').chevronColor} />
               </TouchableOpacity>
 
               {/* 4. Supplements */}
               <TouchableOpacity
-                style={styles.menuItem}
-                onPress={() => handleNavigate('/supplements')}
+                style={getMenuItemStyles('/supplements').container}
+                onPress={() => handleItemPress('/supplements')}
                 activeOpacity={0.7}
               >
                 <View style={styles.menuItemLeft}>
-                  <Ionicons name="flask-outline" size={22} color="#AAAAAA" />
-                  <Text style={styles.menuItemText}>Supplements</Text>
+                  <Ionicons name="flask-outline" size={22} color={getMenuItemStyles('/supplements').iconColor} />
+                  <Text style={getMenuItemStyles('/supplements').text}>Supplements</Text>
                 </View>
-                <Ionicons name="chevron-forward" size={16} color="#555555" />
+                <Ionicons name="chevron-forward" size={16} color={getMenuItemStyles('/supplements').chevronColor} />
               </TouchableOpacity>
 
               {/* 5. Workouts (USER ONLY) */}
               {currentRole === 'User' && (
                 <TouchableOpacity
-                  style={styles.menuItem}
-                  onPress={() => handleNavigate('/workouts')}
+                  style={getMenuItemStyles('/workouts').container}
+                  onPress={() => handleItemPress('/workouts')}
                   activeOpacity={0.7}
                 >
                   <View style={styles.menuItemLeft}>
-                    <MaterialCommunityIcons name="arm-flex-outline" size={22} color="#AAAAAA" />
-                    <Text style={styles.menuItemText}>Workouts</Text>
+                    <MaterialCommunityIcons name="arm-flex-outline" size={22} color={getMenuItemStyles('/workouts').iconColor} />
+                    <Text style={getMenuItemStyles('/workouts').text}>Workouts</Text>
                   </View>
-                  <Ionicons name="chevron-forward" size={16} color="#555555" />
+                  <Ionicons name="chevron-forward" size={16} color={getMenuItemStyles('/workouts').chevronColor} />
                 </TouchableOpacity>
               )}
 
               {/* 6. Calorie Tracker */}
               <TouchableOpacity
-                style={styles.menuItem}
-                onPress={() => handleNavigate('/calorietracker')}
+                style={getMenuItemStyles('/calorietracker').container}
+                onPress={() => handleItemPress('/calorietracker')}
                 activeOpacity={0.7}
               >
                 <View style={styles.menuItemLeft}>
-                  <Ionicons name="calculator-outline" size={22} color="#AAAAAA" />
-                  <Text style={styles.menuItemText}>Calorie Tracker</Text>
+                  <Ionicons name="calculator-outline" size={22} color={getMenuItemStyles('/calorietracker').iconColor} />
+                  <Text style={getMenuItemStyles('/calorietracker').text}>Calorie Tracker</Text>
                 </View>
-                <Ionicons name="chevron-forward" size={16} color="#555555" />
+                <Ionicons name="chevron-forward" size={16} color={getMenuItemStyles('/calorietracker').chevronColor} />
               </TouchableOpacity>
 
               {/* 7. Water Tracker */}
               <TouchableOpacity
-                style={styles.menuItem}
-                onPress={() => handleNavigate('/watertracker')}
+                style={getMenuItemStyles('/watertracker').container}
+                onPress={() => handleItemPress('/watertracker')}
                 activeOpacity={0.7}
               >
                 <View style={styles.menuItemLeft}>
-                  <Ionicons name="water-outline" size={22} color="#AAAAAA" />
-                  <Text style={styles.menuItemText}>Water Tracker</Text>
+                  <Ionicons name="water-outline" size={22} color={getMenuItemStyles('/watertracker').iconColor} />
+                  <Text style={getMenuItemStyles('/watertracker').text}>Water Tracker</Text>
                 </View>
-                <Ionicons name="chevron-forward" size={16} color="#555555" />
+                <Ionicons name="chevron-forward" size={16} color={getMenuItemStyles('/watertracker').chevronColor} />
               </TouchableOpacity>
 
               {/* 8. Reviews */}
               <TouchableOpacity
                 style={styles.menuItem}
-                onPress={() => handleNavigate('/reviews')}
+                onPress={() => handleItemPress('/reviews')}
                 activeOpacity={0.7}
               >
                 <View style={styles.menuItemLeft}>
@@ -302,6 +337,30 @@ export default function HamburgerMenu({ currentRole }: HamburgerMenuProps) {
             </ScrollView>
           </TouchableOpacity>
         </TouchableOpacity>
+      </Modal>
+
+      {/* ── Custom Pending Approval Popup Modal ── */}
+      <Modal
+        visible={showApprovalAlert}
+        transparent={true}
+        animationType="fade"
+        onRequestClose={() => setShowApprovalAlert(false)}
+      >
+        <View style={styles.alertOverlay}>
+          <View style={styles.alertCard}>
+            <Text style={styles.alertMessage}>
+              Your account is pending approval.{"\n"}
+              Please wait until an administrator approves your account.
+            </Text>
+            <TouchableOpacity
+              style={styles.alertButton}
+              onPress={() => setShowApprovalAlert(false)}
+              activeOpacity={0.85}
+            >
+              <Text style={styles.alertButtonText}>OK</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
       </Modal>
     </>
   );
@@ -447,5 +506,54 @@ const styles = StyleSheet.create({
   },
   pendingBadgeText: {
     color: '#F97316',
+  },
+  disabledMenuItem: {
+    opacity: 0.55,
+  },
+  disabledMenuItemText: {
+    color: '#666666',
+  },
+  alertOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.75)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 30,
+  },
+  alertCard: {
+    width: '100%',
+    backgroundColor: '#1E1E1E',
+    borderRadius: 24,
+    borderWidth: 1,
+    borderColor: '#2A2A2A',
+    paddingVertical: 32,
+    paddingHorizontal: 24,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 12 },
+    shadowOpacity: 0.5,
+    shadowRadius: 24,
+    elevation: 20,
+  },
+  alertMessage: {
+    fontSize: 15,
+    color: '#E5E7EB',
+    textAlign: 'center',
+    lineHeight: 22,
+    marginBottom: 28,
+  },
+  alertButton: {
+    width: '100%',
+    height: 50,
+    borderRadius: 14,
+    backgroundColor: '#3B82F6',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  alertButtonText: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: '#FFFFFF',
+    letterSpacing: 0.5,
   },
 });

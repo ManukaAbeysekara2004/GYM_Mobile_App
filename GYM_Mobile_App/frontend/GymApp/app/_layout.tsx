@@ -48,6 +48,12 @@ export default function RootLayout() {
           }}
         />
         <Stack.Screen
+          name="creategympost"
+          options={{
+            animation: 'fade',
+          }}
+        />
+        <Stack.Screen
           name="coachpage"
           options={{
             animation: 'fade',

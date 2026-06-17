@@ -12,7 +12,7 @@ import {
   Dimensions,
   TextInput,
 } from 'react-native';
-import { useLocalSearchParams, useRouter } from 'expo-router';
+import { useLocalSearchParams, useRouter, useNavigation } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { Ionicons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
@@ -45,6 +45,7 @@ export default function GymProfileScreen() {
   /* ── Gym Details State ── */
   const [gymDetails, setGymDetails] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [hasGymPost, setHasGymPost] = useState(false);
 
   /* ── Logo Upload State ── */
   const [isUploadingLogo, setIsUploadingLogo] = useState(false);
@@ -119,15 +120,41 @@ export default function GymProfileScreen() {
     }
   };
 
+  const checkGymPost = async (id: string | null) => {
+    if (!id) return;
+    try {
+      const response = await fetch(`${BACKEND_URL}/api/gym-posts/gym-post-get-by-gym-id/${id}`);
+      const data = await response.json();
+      if (response.status === 200 && data.gymPost) {
+        setHasGymPost(true);
+      } else {
+        setHasGymPost(false);
+      }
+    } catch (error) {
+      setHasGymPost(false);
+    }
+  };
+
+  const navigation = useNavigation();
+
   useEffect(() => {
-    if (gymId) {
-      fetchGymDetails(gymId);
-    } else {
+    if (!gymId) {
       showAlert('Session Expired', 'Please login to view your profile.', 'error', () => {
         router.replace('/login');
       });
+      return;
     }
-  }, [gymId]);
+
+    const unsubscribe = navigation.addListener('focus', () => {
+      fetchGymDetails(gymId);
+      checkGymPost(gymId);
+    });
+
+    fetchGymDetails(gymId);
+    checkGymPost(gymId);
+
+    return unsubscribe;
+  }, [navigation, gymId]);
 
   /* ── Pick & Upload Logo ── */
   const selectGymLogo = async () => {
@@ -510,6 +537,26 @@ export default function GymProfileScreen() {
             </TouchableOpacity>
           </View>
 
+          {/* ── Create / Edit Gym Post Button ── */}
+          <TouchableOpacity
+            style={[styles.managementCardButton, { marginBottom: 20 }]}
+            onPress={() => router.push({ pathname: '/creategympost', params: { gymId, editMode: hasGymPost ? 'true' : 'false' } } as any)}
+            activeOpacity={0.8}
+          >
+            <View style={styles.managementCardLeft}>
+              <View style={styles.managementIconWrapper}>
+                <Ionicons name={hasGymPost ? "create-outline" : "add-circle-outline"} size={24} color={ACCENT} />
+              </View>
+              <View style={styles.managementTextWrapper}>
+                <Text style={styles.managementCardTitle}>{hasGymPost ? "Edit Gym Post" : "Create Gym Post"}</Text>
+                <Text style={styles.managementCardSubtitle}>
+                  {hasGymPost ? "Update your gym posts and packages" : "Manage your gym posts and packages"}
+                </Text>
+              </View>
+            </View>
+            <Ionicons name="chevron-forward" size={18} color={TEXT_MUTED} />
+          </TouchableOpacity>
+
           {/* ── Delete Account Button ── */}
           <TouchableOpacity
             style={styles.deleteButton}
@@ -535,7 +582,7 @@ export default function GymProfileScreen() {
         <View style={styles.modalOverlay}>
           <View style={styles.formModalCard}>
             <Text style={styles.formModalTitle}>Update Contact Number</Text>
-            
+
             <View style={styles.inputWrapper}>
               <Ionicons name="call-outline" size={20} color={TEXT_MUTED} style={styles.inputIcon} />
               <TextInput
@@ -1084,5 +1131,46 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: TEXT_PRIMARY,
     letterSpacing: 0.5,
+  },
+  managementCardButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: CARD,
+    borderRadius: 18,
+    borderWidth: 1,
+    borderColor: BORDER,
+    paddingVertical: 16,
+    paddingHorizontal: 20,
+    width: '100%',
+    minHeight: 80,
+  },
+  managementCardLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 16,
+    flex: 1,
+  },
+  managementIconWrapper: {
+    width: 44,
+    height: 44,
+    borderRadius: 12,
+    backgroundColor: 'rgba(59, 130, 246, 0.1)',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  managementTextWrapper: {
+    flex: 1,
+    justifyContent: 'center',
+  },
+  managementCardTitle: {
+    fontSize: 15,
+    fontWeight: '700',
+    color: TEXT_PRIMARY,
+    marginBottom: 2,
+  },
+  managementCardSubtitle: {
+    fontSize: 12,
+    color: TEXT_SECONDARY,
   },
 });

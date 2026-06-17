@@ -365,7 +365,7 @@ exports.getGymPostByGymId = async (req, res) => {
 };
 
 
-// --- Get All Gym Posts --- //
+// --- 15. Get All Gym Posts --- //
 
 exports.getAllGymPosts = async (req, res) => {
     try {

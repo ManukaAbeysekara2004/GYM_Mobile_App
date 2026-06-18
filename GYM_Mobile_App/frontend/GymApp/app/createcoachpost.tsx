@@ -847,7 +847,12 @@ export default function CreateCoachPostScreen() {
       </Modal>
 
       {/* Delete Confirmation Overlay */}
-      {deleteConfirmVisible && (
+      <Modal
+        visible={deleteConfirmVisible}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setDeleteConfirmVisible(false)}
+      >
         <View style={styles.confirmOverlay}>
           <View style={styles.confirmCard}>
             <Text style={styles.confirmMessage}>
@@ -871,7 +876,7 @@ export default function CreateCoachPostScreen() {
             </View>
           </View>
         </View>
-      )}
+      </Modal>
 
       {/* Global Alert */}
       <Modal visible={popup.visible} transparent animationType="fade" onRequestClose={dismissPopup}>
@@ -1252,11 +1257,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 24,
     zIndex: 100,
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
   },
   confirmCard: {
     backgroundColor: '#1E1E1E',

@@ -67,7 +67,7 @@ exports.Supplement_Update_Name = async (req, res) => {
         let update_supplementName = await supplement.findByIdAndUpdate(
             supplementPostId,
             { $set: { SupplementName: SupplementName } },
-            { new: true }
+            { returnDocument: 'after' }
         );
 
         if (!update_supplementName) {
@@ -107,7 +107,7 @@ exports.Supplement_Update_Brand = async (req, res) => {
         let update_supplementBrand = await supplement.findByIdAndUpdate(
             supplementPostId,
             { $set: { SupplementBrand: SupplementBrand } },
-            { new: true }
+            { returnDocument: 'after' }
         );
 
         if (!update_supplementBrand) {
@@ -146,7 +146,7 @@ exports.Supplement_Update_Type = async (req, res) => {
         let update_supplementType = await supplement.findByIdAndUpdate(
             supplementPostId,
             { $set: { SupplementType: SupplementType } },
-            { new: true }
+            { returnDocument: 'after' }
         );
 
         if (!update_supplementType) {
@@ -185,7 +185,7 @@ exports.Supplement_Update_Description = async (req, res) => {
         let update_supplementDescription = await supplement.findByIdAndUpdate(
             supplementPostId,
             { $set: { SupplementDescription: SupplementDescription } },
-            { new: true }
+            { returnDocument: 'after' }
         );
 
         if (!update_supplementDescription) {
@@ -224,7 +224,7 @@ exports.Supplement_Update_Price = async (req, res) => {
         let update_supplementPrice = await supplement.findByIdAndUpdate(
             supplementPostId,
             { $set: { SupplementPrice: SupplementPrice } },
-            { new: true }
+            { returnDocument: 'after' }
         );
 
         if (!update_supplementPrice) {
@@ -274,7 +274,7 @@ exports.Supplement_Update_Stock = async (req, res) => {
         let update_supplementStock = await supplement.findByIdAndUpdate(
             supplementPostId,
             { $set: { SupplementStock: SupplementStock } },
-            { new: true }
+            { returnDocument: 'after' }
         );
 
         if (!update_supplementStock) {
@@ -285,7 +285,7 @@ exports.Supplement_Update_Stock = async (req, res) => {
         let update_supplementAvailable = await supplement.findByIdAndUpdate(
             supplementPostId,
             { $set: { SupplementAvailable: SupplementAvailable } },
-            { new: true }
+            { returnDocument: 'after' }
         );
 
         if (!update_supplementAvailable) {
@@ -324,7 +324,7 @@ exports.Supplement_Update_Image = async (req, res) => {
         let update_supplementImage = await supplement.findByIdAndUpdate(
             supplementPostId,
             { $set: { SupplementImage: SupplementImage } },
-            { new: true }
+            { returnDocument: 'after' }
         );
 
         if (!update_supplementImage) {
@@ -467,7 +467,7 @@ exports.Supplement_Buy = async (req, res) => {
         let update_supplementStock = await supplement.findByIdAndUpdate(
             supplementPostId,
             { $set: { SupplementStock: Supplement.SupplementStock - Quantity } },
-            { new: true }
+            { returnDocument: 'after' }
         );
 
         if (!update_supplementStock) {
@@ -479,7 +479,7 @@ exports.Supplement_Buy = async (req, res) => {
             let update_supplementAvailable = await supplement.findByIdAndUpdate(
                 supplementPostId,
                 { $set: { SupplementAvailable: false } },
-                { new: true }
+                { returnDocument: 'after' }
             );
 
             if (!update_supplementAvailable) {

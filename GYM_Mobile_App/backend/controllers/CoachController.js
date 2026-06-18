@@ -110,7 +110,7 @@ exports.Coach_UpdateContactNumber = async (req, res) => {
         let update_coach = await Coach.findByIdAndUpdate(
             coachId,
             { $set: { CoachContactNumber: newContactNumber } },
-            { new: true }
+            { returnDocument: 'after' }
         );
 
         if (!update_coach) {
@@ -161,7 +161,7 @@ exports.Coach_UpdatePassword = async (req, res) => {
         let update_password = await Coach.findByIdAndUpdate(
             coachId,
             { $set: { Password: hashedPassword } },
-            { new: true }
+            { returnDocument: 'after' }
         );
 
         if (!update_password) {
@@ -192,7 +192,7 @@ exports.Coach_UpdateDP = async (req, res) => {
         let update_dp = await Coach.findByIdAndUpdate(
             coachId,
             { $set: { CoachDP: CoachDP } },
-            { new: true }
+            { returnDocument: 'after' }
         );
 
         if (!update_dp) {
@@ -232,12 +232,12 @@ exports.Coach_Details = async (req, res) => {
         const { coachId } = req.params;
 
         // Check if coach is exist or not
-        let coach = await Coach.findById(coachId);
+        let coach = await Coach.findById(coachId).select('-Password');
         if (!coach) {
             return res.status(404).json({ message: 'Coach not found' });
         }
 
-        res.status(200).json({ coach }).select('-Password');
+        res.status(200).json({ coach });
     } catch (error) {
         res.status(500).json({ message: 'Server Error', error: error.message });
     }

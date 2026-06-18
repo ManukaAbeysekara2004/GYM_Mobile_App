@@ -53,7 +53,7 @@ exports.updateDescription = async (req, res) => {
         let update_description = await Coachpost.findByIdAndUpdate(
             coachPostId,
             { $set: { description: description } },
-            { new: true }
+            { returnDocument: 'after' }
         );
 
         if (!update_description) {
@@ -84,7 +84,7 @@ exports.updateExperience = async (req, res) => {
         let update_experience = await Coachpost.findByIdAndUpdate(
             coachPostId,
             { $set: { experience: experience } },
-            { new: true }
+            { returnDocument: 'after' }
         );
 
         if (!update_experience) {
@@ -115,7 +115,7 @@ exports.updateFee = async (req, res) => {
         let update_fee = await Coachpost.findByIdAndUpdate(
             coachPostId,
             { $set: { fee: fee } },
-            { new: true }
+            { returnDocument: 'after' }
         );
 
         if (!update_fee) {
@@ -146,7 +146,7 @@ exports.updateDuration = async (req, res) => {
         let update_duration = await Coachpost.findByIdAndUpdate(
             coachPostId,
             { $set: { duration: duration } },
-            { new: true }
+            { returnDocument: 'after' }
         );
 
         if (!update_duration) {
@@ -177,7 +177,7 @@ exports.updateContactNumber = async (req, res) => {
         let update_contactNumber = await Coachpost.findByIdAndUpdate(
             coachPostId,
             { $set: { contactNumber: contactNumber } },
-            { new: true }
+            { returnDocument: 'after' }
         );
 
         if (!update_contactNumber) {
@@ -208,7 +208,7 @@ exports.updatePostImage = async (req, res) => {
         let update_postimage = await Coachpost.findByIdAndUpdate(
             coachPostId,
             { $set: { postimage: postimage } },
-            { new: true }
+            { returnDocument: 'after' }
         );
 
         if (!update_postimage) {
@@ -268,7 +268,8 @@ exports.getCoachPostByCoachId = async (req, res) => {
 exports.getAllCoachPosts = async (req, res) => {
     try {
         // Get all coachposts
-        const coachposts = await Coachpost.find();
+        const approvedcoachs = await Coach.find({ Approve: true });
+        const coachposts = await Coachpost.find({ coachId: { $in: approvedcoachs.map(coach => coach._id) } });
 
         if (!coachposts || coachposts.length === 0) {
             return res.status(404).json({ message: 'No coach post found' });

@@ -45,7 +45,7 @@ exports.updateGymPostInformation = async (req, res) => {
         let gymPost = await GymPost.findByIdAndUpdate(
             gymPostId,
             { $set: { gymInfotmation: gymInfotmation } },
-            { new: true }
+            { returnDocument: 'after' }
         );
 
         if (!gymPost) {
@@ -71,7 +71,7 @@ exports.addGymFasilities = async (req, res) => {
         let gymPost = await GymPost.findByIdAndUpdate(
             gymPostId,
             { $push: { gymFasilities: { fasility } } },
-            { new: true }
+            { returnDocument: 'after' }
         );
 
         if (!gymPost) {
@@ -97,7 +97,7 @@ exports.deleteGymFasilities = async (req, res) => {
         let gymPost = await GymPost.findByIdAndUpdate(
             gymPostId,
             { $pull: { gymFasilities: { _id: fasilityId } } },
-            { new: true }
+            { returnDocument: 'after' }
         );
 
         if (!gymPost) {
@@ -123,7 +123,7 @@ exports.updateOpenHours = async (req, res) => {
         let gymPost = await GymPost.findByIdAndUpdate(
             gymPostId,
             { $set: { openHours: openHours } },
-            { new: true }
+            { returnDocument: 'after' }
         );
 
         if (!gymPost) {
@@ -149,7 +149,7 @@ exports.updateCloseHours = async (req, res) => {
         let gymPost = await GymPost.findByIdAndUpdate(
             gymPostId,
             { $set: { closeHours: closeHours } },
-            { new: true }
+            { returnDocument: 'after' }
         );
 
         if (!gymPost) {
@@ -180,7 +180,7 @@ exports.updateGymPostContactNumber = async (req, res) => {
         let gymPost = await GymPost.findByIdAndUpdate(
             gymPostId,
             { $set: { gymContactNumber: newContactNumber } },
-            { new: true }
+            { returnDocument: 'after' }
         );
 
         if (!gymPost) {
@@ -206,7 +206,7 @@ exports.updateCity = async (req, res) => {
         let gymPost = await GymPost.findByIdAndUpdate(
             gymPostId,
             { $set: { city: city } },
-            { new: true }
+            { returnDocument: 'after' }
         );
 
         if (!gymPost) {
@@ -232,7 +232,7 @@ exports.addGymPackage = async (req, res) => {
         let gymPost = await GymPost.findByIdAndUpdate(
             gymPostId,
             { $push: { packages: { packageName: packageName, packagePrice: packagePrice, packageDuration: packageDuration, features: features } } },
-            { new: true }
+            { returnDocument: 'after' }
         );
 
         if (!gymPost) {
@@ -258,7 +258,7 @@ exports.deleteGymPackages = async (req, res) => {
         let gymPost = await GymPost.findByIdAndUpdate(
             gymPostId,
             { $pull: { packages: { _id: packageId } } },
-            { new: true }
+            { returnDocument: 'after' }
         );
 
         if (!gymPost) {
@@ -288,7 +288,7 @@ exports.updateGymPostImage = async (req, res) => {
         let gymPost = await GymPost.findByIdAndUpdate(
             gymPostId,
             { $set: { gymImg: gymImg } },
-            { new: true }
+            { returnDocument: 'after' }
         );
 
         if (!gymPost) {
@@ -369,7 +369,8 @@ exports.getGymPostByGymId = async (req, res) => {
 
 exports.getAllGymPosts = async (req, res) => {
     try {
-        const gymPosts = await GymPost.find().populate('gymId', 'GymName Address');
+        const approvedgyms = await Gym.find({ Approve: true });
+        const gymPosts = await GymPost.find({ gymId: { $in: approvedgyms.map(gym => gym._id) } }).populate('gymId', 'GymName Address');
 
         if (!gymPosts || gymPosts.length === 0) {
             return res.status(404).json({ message: 'No gym post found' });

@@ -310,7 +310,7 @@ export default function GymManagementScreen() {
                   {/* Card Body: Personal Details */}
                   <View style={styles.cardBody}>
                     <Text style={styles.sectionLabel}>Personal Details</Text>
-                    
+
                     <View style={styles.infoRow}>
                       <Ionicons name="person-outline" size={15} color={TEXT_MUTED} />
                       <Text style={styles.infoValue}>Owner: {item.GymOwnerName}</Text>

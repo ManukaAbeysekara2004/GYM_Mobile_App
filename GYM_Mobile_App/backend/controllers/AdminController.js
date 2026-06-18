@@ -108,7 +108,7 @@ exports.Admin_UpdateContactNumber = async (req, res) => {
         let update_admin = await Admin.findByIdAndUpdate(
             adminId,
             { $set: { AdminContactNumber: newContactNumber } },
-            { new: true }
+            { returnDocument: 'after' }
         );
 
         if (!update_admin) {
@@ -159,7 +159,7 @@ exports.Admin_UpdatePassword = async (req, res) => {
         let update_password = await Admin.findByIdAndUpdate(
             adminId,
             { $set: { Password: hashedPassword } },
-            { new: true }
+            { returnDocument: 'after' }
         );
 
         if (!update_password) {
@@ -190,7 +190,7 @@ exports.Admin_UpdateDP = async (req, res) => {
         let update_dp = await Admin.findByIdAndUpdate(
             adminId,
             { $set: { AdminDP } },
-            { new: true }
+            { returnDocument: 'after' }
         );
 
         if (!update_dp) {

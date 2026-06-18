@@ -388,7 +388,7 @@ const styles = StyleSheet.create({
   },
   sidebar: {
     width: SCREEN_WIDTH * 0.75,
-    height: SCREEN_HEIGHT,
+    height: '100%',
     backgroundColor: '#151515',
     borderTopRightRadius: 24,
     borderBottomRightRadius: 24,
@@ -396,6 +396,7 @@ const styles = StyleSheet.create({
     borderRightColor: '#2A2A2A',
     paddingTop: Platform.OS === 'ios' ? 60 : 45,
     paddingHorizontal: 20,
+    overflow: 'hidden',
   },
   header: {
     flexDirection: 'row',

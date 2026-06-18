@@ -16,7 +16,7 @@ exports.User_Workout_Create = async (req, res) => {
         const newWorkout = await User.findByIdAndUpdate(
             userId,
             { $push: { Workouts: { workoutName, sets, reps, weight, duration } } },
-            { new: true }
+            { returnDocument: 'after' }
         );
 
         if (!newWorkout) {
@@ -51,7 +51,7 @@ exports.User_Workout_UpdateSets = async (req, res) => {
             { $set: { "Workouts.$[elem].sets": sets } },
             {
                 arrayFilters: [{ "elem._id": workoutId }],
-                new: true
+                returnDocument: 'after'
             }
         );
 
@@ -84,7 +84,7 @@ exports.User_Workout_UpdateReps = async (req, res) => {
             { $set: { "Workouts.$[elem].reps": reps } },
             {
                 arrayFilters: [{ "elem._id": workoutId }],
-                new: true
+                returnDocument: 'after'
             }
         );
 
@@ -117,7 +117,7 @@ exports.User_Workout_UpdateWeight = async (req, res) => {
             { $set: { "Workouts.$[elem].weight": weight } },
             {
                 arrayFilters: [{ "elem._id": workoutId }],
-                new: true
+                returnDocument: 'after'
             }
         );
 
@@ -150,7 +150,7 @@ exports.User_Workout_UpdateDuration = async (req, res) => {
             { $set: { "Workouts.$[elem].duration": duration } },
             {
                 arrayFilters: [{ "elem._id": workoutId }],
-                new: true
+                returnDocument: 'after'
             }
         );
 
@@ -180,7 +180,7 @@ exports.User_Workout_Delete = async (req, res) => {
         let updatedUser = await User.findByIdAndUpdate(
             userId,
             { $pull: { Workouts: { _id: workoutId } } },
-            { new: true }
+            { returnDocument: 'after' }
         );
 
         res.status(200).json({ message: 'Workout deleted successfully', updatedUser });

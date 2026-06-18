@@ -115,7 +115,7 @@ exports.Gym_UpdateContactNumber = async (req, res) => {
         let update_gym = await Gym.findByIdAndUpdate(
             gymId,
             { $set: { GymOwnerContactNumber: newContactNumber } },
-            { new: true }
+            { returnDocument: 'after' }
         );
 
         if (!update_gym) {
@@ -166,7 +166,7 @@ exports.Gym_UpdatePassword = async (req, res) => {
         let update_password = await Gym.findByIdAndUpdate(
             gymId,
             { $set: { Password: hashedPassword } },
-            { new: true }
+            { returnDocument: 'after' }
         );
 
         if (!update_password) {
@@ -197,7 +197,7 @@ exports.Gym_UpdateLogo = async (req, res) => {
         let update_logo = await Gym.findByIdAndUpdate(
             gymId,
             { $set: { GymLogo: gymLogo } },
-            { new: true }
+            { returnDocument: 'after' }
         );
 
         if (!update_logo) {
@@ -237,12 +237,12 @@ exports.Gym_Details = async (req, res) => {
         const { gymId } = req.params;
 
         // Check if gym is exist or not 
-        let gym = await Gym.findById(gymId);
+        let gym = await Gym.findById(gymId).select('-Password');
         if (!gym) {
             return res.status(404).json({ message: 'Gym not found' });
         }
 
-        res.status(200).json({ gym }).select('-Password');
+        res.status(200).json({ gym });
     } catch (error) {
         res.status(500).json({ message: 'Server Error', error: error.message });
     }

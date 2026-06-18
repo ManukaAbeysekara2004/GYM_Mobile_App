@@ -308,7 +308,7 @@ export default function CoachManagementScreen() {
                   {/* Card Body: Personal details */}
                   <View style={styles.cardBody}>
                     <Text style={styles.sectionLabel}>Personal Details</Text>
-                    
+
                     <View style={styles.infoRow}>
                       <Ionicons name="calendar-outline" size={15} color={TEXT_MUTED} />
                       <Text style={styles.infoValue}>Age: {item.CoachAge}</Text>
@@ -320,7 +320,7 @@ export default function CoachManagementScreen() {
                   {/* Card Body: Contact and Personal Information */}
                   <View style={styles.cardBody}>
                     <Text style={styles.sectionLabel}>Contact Information</Text>
-                    
+
                     <View style={styles.infoRow}>
                       <Ionicons name="mail-outline" size={15} color={TEXT_MUTED} />
                       <Text style={styles.infoValue} numberOfLines={1}>{item.Email}</Text>

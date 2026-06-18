@@ -539,22 +539,46 @@ export default function GymProfileScreen() {
 
           {/* ── Create / Edit Gym Post Button ── */}
           <TouchableOpacity
-            style={[styles.managementCardButton, { marginBottom: 20 }]}
-            onPress={() => router.push({ pathname: '/creategympost', params: { gymId, editMode: hasGymPost ? 'true' : 'false' } } as any)}
+            style={[
+              styles.managementCardButton,
+              { marginBottom: 20 },
+              gymDetails?.Approve === false && styles.disabledManagementCardButton
+            ]}
+            onPress={() => {
+              if (gymDetails?.Approve !== false) {
+                router.push({ pathname: '/creategympost', params: { gymId, editMode: hasGymPost ? 'true' : 'false' } } as any);
+              }
+            }}
+            disabled={gymDetails?.Approve === false}
             activeOpacity={0.8}
           >
             <View style={styles.managementCardLeft}>
-              <View style={styles.managementIconWrapper}>
-                <Ionicons name={hasGymPost ? "create-outline" : "add-circle-outline"} size={24} color={ACCENT} />
+              <View style={[
+                styles.managementIconWrapper,
+                gymDetails?.Approve === false && styles.disabledManagementIconWrapper
+              ]}>
+                <Ionicons 
+                  name={hasGymPost ? "create-outline" : "add-circle-outline"} 
+                  size={24} 
+                  color={gymDetails?.Approve !== false ? ACCENT : '#666666'} 
+                />
               </View>
               <View style={styles.managementTextWrapper}>
-                <Text style={styles.managementCardTitle}>{hasGymPost ? "Edit Gym Post" : "Create Gym Post"}</Text>
-                <Text style={styles.managementCardSubtitle}>
+                <Text style={[
+                  styles.managementCardTitle,
+                  gymDetails?.Approve === false && styles.disabledManagementCardTitle
+                ]}>
+                  {hasGymPost ? "Edit Gym Post" : "Create Gym Post"}
+                </Text>
+                <Text style={[
+                  styles.managementCardSubtitle,
+                  gymDetails?.Approve === false && styles.disabledManagementCardSubtitle
+                ]}>
                   {hasGymPost ? "Update your gym posts and packages" : "Manage your gym posts and packages"}
                 </Text>
               </View>
             </View>
-            <Ionicons name="chevron-forward" size={18} color={TEXT_MUTED} />
+            <Ionicons name="chevron-forward" size={18} color={gymDetails?.Approve !== false ? TEXT_MUTED : '#333333'} />
           </TouchableOpacity>
 
           {/* ── Delete Account Button ── */}
@@ -1172,5 +1196,18 @@ const styles = StyleSheet.create({
   managementCardSubtitle: {
     fontSize: 12,
     color: TEXT_SECONDARY,
+  },
+  disabledManagementCardButton: {
+    opacity: 0.55,
+    borderColor: '#222222',
+  },
+  disabledManagementIconWrapper: {
+    backgroundColor: 'rgba(255, 255, 255, 0.05)',
+  },
+  disabledManagementCardTitle: {
+    color: '#666666',
+  },
+  disabledManagementCardSubtitle: {
+    color: '#555555',
   },
 });

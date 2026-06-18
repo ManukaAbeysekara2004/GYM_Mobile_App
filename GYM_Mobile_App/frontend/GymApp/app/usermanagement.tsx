@@ -307,7 +307,7 @@ export default function UserManagementScreen() {
                   {/* Card Body: Contact and Personal Information */}
                   <View style={styles.cardBody}>
                     <Text style={styles.sectionLabel}>Contact Information</Text>
-                    
+
                     <View style={styles.infoRow}>
                       <Ionicons name="mail-outline" size={15} color={TEXT_MUTED} />
                       <Text style={styles.infoValue} numberOfLines={1}>{item.Email}</Text>

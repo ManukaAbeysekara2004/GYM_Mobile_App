@@ -103,7 +103,7 @@ exports.User_UpdateContactNumber = async (req, res) => {
         let update_user = await User.findByIdAndUpdate(
             userId,
             { $set: { UserContactNumber: newContactNumber } },
-            { new: true }
+            { returnDocument: 'after' }
         );
 
         if (!update_user) {
@@ -154,7 +154,7 @@ exports.User_UpdatePassword = async (req, res) => {
         let update_password = await User.findByIdAndUpdate(
             userId,
             { $set: { Password: hashedPassword } },
-            { new: true }
+            { returnDocument: 'after' }
         );
 
         if (!update_password) {
@@ -185,7 +185,7 @@ exports.User_UpdateDP = async (req, res) => {
         let update_dp = await User.findByIdAndUpdate(
             userId,
             { $set: { UserDP: UserDP } },
-            { new: true }
+            { returnDocument: 'after' }
         );
 
         if (!update_dp) {
@@ -225,12 +225,12 @@ exports.User_Details = async (req, res) => {
         const { userId } = req.params;
 
         // Check if user is exist or not
-        let user = await User.findById(userId);
+        let user = await User.findById(userId).select('-Password');
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
 
-        res.status(200).json({ user }).select('-Password');
+        res.status(200).json({ user });
     } catch (error) {
         res.status(500).json({ message: 'Server Error', error: error.message });
     }

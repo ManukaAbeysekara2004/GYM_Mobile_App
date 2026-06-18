@@ -80,7 +80,7 @@ exports.updateReviewAndRating = async (req, res) => {
         const updateReviewAndRating = await ReviewAndRating.findOneAndUpdate(
             { PersonID: PersonID },
             { $set: { Review: Review, Rating: Rating } },
-            { new: true }
+            { returnDocument: 'after' }
         );
         if (!updateReviewAndRating) {
             return res.status(404).json({ message: 'Failed to update review and rating' });

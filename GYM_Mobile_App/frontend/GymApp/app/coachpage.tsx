@@ -12,7 +12,7 @@ import {
   Dimensions,
   TextInput,
 } from 'react-native';
-import { useLocalSearchParams, useRouter } from 'expo-router';
+import { useLocalSearchParams, useRouter, useNavigation } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { Ionicons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
@@ -119,15 +119,43 @@ export default function CoachProfileScreen() {
     }
   };
 
+  const [hasCoachPost, setHasCoachPost] = useState(false);
+
+  const checkCoachPost = async (id: string | null) => {
+    if (!id) return;
+    try {
+      const response = await fetch(`${BACKEND_URL}/api/coachposts/coach-post-get-by-coach-id/${id}`);
+      const data = await response.json();
+      if (response.status === 200 && data.coachpost && data.coachpost.length > 0) {
+        setHasCoachPost(true);
+      } else {
+        setHasCoachPost(false);
+      }
+    } catch (error) {
+      setHasCoachPost(false);
+    }
+  };
+
+  const navigation = useNavigation();
+
   useEffect(() => {
-    if (coachId) {
-      fetchCoachDetails(coachId);
-    } else {
+    if (!coachId) {
       showAlert('Session Expired', 'Please login to view your profile.', 'error', () => {
         router.replace('/login');
       });
+      return;
     }
-  }, [coachId]);
+
+    const unsubscribe = navigation.addListener('focus', () => {
+      fetchCoachDetails(coachId);
+      checkCoachPost(coachId);
+    });
+
+    fetchCoachDetails(coachId);
+    checkCoachPost(coachId);
+
+    return unsubscribe;
+  }, [navigation, coachId]);
 
   /* ── Pick & Upload DP ── */
   const selectProfileImage = async () => {
@@ -481,6 +509,50 @@ export default function CoachProfileScreen() {
               <Text style={styles.actionButtonText}>Change Password</Text>
             </TouchableOpacity>
           </View>
+
+          {/* ── Create / Edit Coach Post Button ── */}
+          <TouchableOpacity
+            style={[
+              styles.managementCardButton,
+              { marginBottom: 20 },
+              coachDetails?.Approve === false && styles.disabledManagementCardButton
+            ]}
+            onPress={() => {
+              if (coachDetails?.Approve !== false) {
+                router.push({ pathname: '/createcoachpost', params: { coachId, editMode: hasCoachPost ? 'true' : 'false' } } as any);
+              }
+            }}
+            disabled={coachDetails?.Approve === false}
+            activeOpacity={0.8}
+          >
+            <View style={styles.managementCardLeft}>
+              <View style={[
+                styles.managementIconWrapper,
+                coachDetails?.Approve === false && styles.disabledManagementIconWrapper
+              ]}>
+                <Ionicons 
+                  name={hasCoachPost ? "create-outline" : "add-circle-outline"} 
+                  size={24} 
+                  color={coachDetails?.Approve !== false ? ACCENT : '#666666'} 
+                />
+              </View>
+              <View style={styles.managementTextWrapper}>
+                <Text style={[
+                  styles.managementCardTitle,
+                  coachDetails?.Approve === false && styles.disabledManagementCardTitle
+                ]}>
+                  {hasCoachPost ? "Edit Coach Post" : "Create Coach Post"}
+                </Text>
+                <Text style={[
+                  styles.managementCardSubtitle,
+                  coachDetails?.Approve === false && styles.disabledManagementCardSubtitle
+                ]}>
+                  {hasCoachPost ? "Update your coach posts and details" : "Manage your coach posts and details"}
+                </Text>
+              </View>
+            </View>
+            <Ionicons name="chevron-forward" size={18} color={coachDetails?.Approve !== false ? TEXT_MUTED : '#333333'} />
+          </TouchableOpacity>
 
           {/* ── Delete Account Button ── */}
           <TouchableOpacity
@@ -1056,5 +1128,59 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: TEXT_PRIMARY,
     letterSpacing: 0.5,
+  },
+  managementCardButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: CARD,
+    borderRadius: 18,
+    borderWidth: 1,
+    borderColor: BORDER,
+    paddingVertical: 16,
+    paddingHorizontal: 20,
+    width: '100%',
+    minHeight: 80,
+  },
+  managementCardLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 16,
+    flex: 1,
+  },
+  managementIconWrapper: {
+    width: 44,
+    height: 44,
+    borderRadius: 12,
+    backgroundColor: 'rgba(59, 130, 246, 0.1)',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  managementTextWrapper: {
+    flex: 1,
+    justifyContent: 'center',
+  },
+  managementCardTitle: {
+    fontSize: 15,
+    fontWeight: '700',
+    color: TEXT_PRIMARY,
+    marginBottom: 2,
+  },
+  managementCardSubtitle: {
+    fontSize: 12,
+    color: TEXT_SECONDARY,
+  },
+  disabledManagementCardButton: {
+    opacity: 0.55,
+    borderColor: '#222222',
+  },
+  disabledManagementIconWrapper: {
+    backgroundColor: 'rgba(255, 255, 255, 0.05)',
+  },
+  disabledManagementCardTitle: {
+    color: '#666666',
+  },
+  disabledManagementCardSubtitle: {
+    color: '#555555',
   },
 });

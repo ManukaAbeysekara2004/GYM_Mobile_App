@@ -84,6 +84,12 @@ export default function RootLayout() {
           }}
         />
         <Stack.Screen
+          name="createsupplementpost"
+          options={{
+            animation: 'fade',
+          }}
+        />
+        <Stack.Screen
           name="workouts"
           options={{
             animation: 'fade',

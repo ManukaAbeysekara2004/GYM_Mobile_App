@@ -1,5 +1,5 @@
 # Your list 
-datasets/Data_Set.csv
+datasets/
 notebooks/.ipynb_checkpoints/
 saved_models/
 venv/

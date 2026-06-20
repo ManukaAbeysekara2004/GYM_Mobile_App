@@ -72,6 +72,7 @@ GYM_Mobile_App/
 │
 ├── AI_Models/                 
 │   ├── AI_Models_Code/
+│   ├── datasets/
 │   ├── notebooks/
 │   ├── saved_models/         
 │   ├── venv/              
@@ -147,10 +148,28 @@ With your virtual environment activated, install the required packages and confi
 pip install -r requirements.txt
 ```
 
-### 4. Place Dataset & Models
+###  4. Place Dataset & Models
+After downloading the assets from Hugging Face, extract the compressed files and arrange them inside the project folder exactly as shown below:
 
-* Place Dataset: Extract your downloaded Hugging Face dataset and place it inside AI_Models/Datasets/.
-* Place Models: Extract your downloaded Hugging Face model weights and place them inside AI_Models/AI_Models/.
+### A. Place Dataset
+* Action: Extract your downloaded `GymApp-DataSet` zip folder.
+* Destination: Place the extracted folder inside `AI_Models/`.
+
+### B. Place Models
+* Action: Extract your downloaded `GymApp-AI-Models` zip folder.
+* Destination: Place the extracted model files inside `AI_Models/`.
+
+### 🔍 Expected Folder Structure Verification
+Your directory layout must look like this before running the servers:
+```text
+─ AI_Models/                 
+   ├── AI_Models_Code/
+   ├── datasets/
+   ├── notebooks/
+   ├── saved_models/         
+   ├── venv/              
+   └── requirements.txt 
+```
 
 ### 5. Boot Up the AI Services
 ```bash

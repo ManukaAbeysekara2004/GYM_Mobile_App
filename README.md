@@ -116,7 +116,6 @@ Follow these sequential steps to set up the entire Flexo ecosystem locally:
 
 ```bash
 git clone [https://github.com/ManukaAbeysekara2004/GYM_Mobile_App.git](https://github.com/ManukaAbeysekara2004/GYM_Mobile_App.git)
-cd GYM_Mobile_App
 ```
 
 ### 2. Setup the AI Virtual Environment

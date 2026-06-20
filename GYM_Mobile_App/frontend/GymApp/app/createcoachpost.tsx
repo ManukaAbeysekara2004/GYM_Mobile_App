@@ -110,7 +110,16 @@ export default function CreateCoachPostScreen() {
       const response = await fetch(`${BACKEND_URL}/api/coachposts/coach-post-get-by-coach-id/${coachId}`);
       const data = await response.json();
       if (response.status === 200 && data.coachpost && data.coachpost.length > 0) {
-        setCoachPost(data.coachpost[0]);
+        const post = data.coachpost[0];
+        setCoachPost(post);
+        // Pre-load the existing data into the form inputs
+        setPostimage(post.postimage || '');
+        setFullname(post.fullname || '');
+        setDescription(post.description || '');
+        setExperience(post.experience || '');
+        setFee(String(post.fee || ''));
+        setDuration(String(post.duration || ''));
+        setContactNumber(post.contactNumber || '');
       } else {
         setCoachPost(null);
       }
@@ -120,6 +129,7 @@ export default function CreateCoachPostScreen() {
       setIsLoading(false);
     }
   };
+
 
   useEffect(() => {
     if (coachId) {
@@ -252,6 +262,8 @@ export default function CreateCoachPostScreen() {
   const handleCreateCoachPost = async () => {
     Keyboard.dismiss();
 
+    if (isActionLoading) return;
+
     if (
       !validateForm(
         postimage,
@@ -268,17 +280,36 @@ export default function CreateCoachPostScreen() {
 
     setIsActionLoading(true);
 
-    const body = {
-      fullname: fullname.trim(),
-      description: description.trim(),
-      experience: experience.trim(),
-      fee: Number(fee),
-      duration: Number(duration),
-      contactNumber: contactNumber.trim(),
-      postimage: postimage,
-    };
-
     try {
+      // Pre-check if coach post already exists to prevent duplicate creation
+      const checkResponse = await fetch(`${BACKEND_URL}/api/coachposts/coach-post-get-by-coach-id/${coachId}`);
+      const checkData = await checkResponse.json();
+      if (checkResponse.status === 200 && checkData.coachpost && checkData.coachpost.length > 0) {
+        const existingPost = checkData.coachpost[0];
+        setCoachPost(existingPost);
+        setPostimage(existingPost.postimage || '');
+        setFullname(existingPost.fullname || '');
+        setDescription(existingPost.description || '');
+        setExperience(existingPost.experience || '');
+        setFee(String(existingPost.fee || ''));
+        setDuration(String(existingPost.duration || ''));
+        setContactNumber(existingPost.contactNumber || '');
+
+        showPopup('Info', 'Coach Post already exists. Switching to Edit mode.', 'info');
+        setIsActionLoading(false);
+        return;
+      }
+
+      const body = {
+        fullname: fullname.trim(),
+        description: description.trim(),
+        experience: experience.trim(),
+        fee: Number(fee),
+        duration: Number(duration),
+        contactNumber: contactNumber.trim(),
+        postimage: postimage,
+      };
+
       const response = await fetch(`${BACKEND_URL}/api/coachposts/coach-post-create/${coachId}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -318,15 +349,19 @@ export default function CreateCoachPostScreen() {
   const handleSaveUpdates = async () => {
     Keyboard.dismiss();
 
+    if (isActionLoading) return;
+
+    if (!coachPost) return;
+
     if (
       !validateForm(
-        editPostImage,
-        coachPost.fullname, // Full name isn't editable as per prompt/backend APIs
-        editDescription,
-        editExperience,
-        editFee,
-        editDuration,
-        editContactNumber
+        postimage,
+        coachPost.fullname || fullname,
+        description,
+        experience,
+        fee,
+        duration,
+        contactNumber
       )
     ) {
       return;
@@ -337,67 +372,67 @@ export default function CreateCoachPostScreen() {
     const fetchThunks: (() => Promise<any>)[] = [];
 
     // 1. Image
-    if (editPostImage !== coachPost.postimage) {
+    if (postimage !== coachPost.postimage) {
       fetchThunks.push(() =>
         fetch(`${BACKEND_URL}/api/coachposts/coach-post-image/${coachPostId}`, {
           method: 'PATCH',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ postimage: editPostImage }),
+          body: JSON.stringify({ postimage: postimage }),
         })
       );
     }
 
     // 2. Description
-    if (editDescription !== coachPost.description) {
+    if (description.trim() !== coachPost.description) {
       fetchThunks.push(() =>
         fetch(`${BACKEND_URL}/api/coachposts/coach-post-description/${coachPostId}`, {
           method: 'PATCH',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ description: editDescription }),
+          body: JSON.stringify({ description: description.trim() }),
         })
       );
     }
 
     // 3. Experience
-    if (editExperience !== coachPost.experience) {
+    if (experience.trim() !== coachPost.experience) {
       fetchThunks.push(() =>
         fetch(`${BACKEND_URL}/api/coachposts/coach-post-experience/${coachPostId}`, {
           method: 'PATCH',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ experience: editExperience }),
+          body: JSON.stringify({ experience: experience.trim() }),
         })
       );
     }
 
     // 4. Fee
-    if (Number(editFee) !== coachPost.fee) {
+    if (Number(fee) !== coachPost.fee) {
       fetchThunks.push(() =>
         fetch(`${BACKEND_URL}/api/coachposts/coach-post-fee/${coachPostId}`, {
           method: 'PATCH',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ fee: Number(editFee) }),
+          body: JSON.stringify({ fee: Number(fee) }),
         })
       );
     }
 
     // 5. Duration
-    if (Number(editDuration) !== coachPost.duration) {
+    if (Number(duration) !== coachPost.duration) {
       fetchThunks.push(() =>
         fetch(`${BACKEND_URL}/api/coachposts/coach-post-duration/${coachPostId}`, {
           method: 'PATCH',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ duration: Number(editDuration) }),
+          body: JSON.stringify({ duration: Number(duration) }),
         })
       );
     }
 
     // 6. Contact Number
-    if (editContactNumber !== coachPost.contactNumber) {
+    if (contactNumber.trim() !== coachPost.contactNumber) {
       fetchThunks.push(() =>
         fetch(`${BACKEND_URL}/api/coachposts/coach-post-contact-number/${coachPostId}`, {
           method: 'PATCH',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ contactNumber: editContactNumber }),
+          body: JSON.stringify({ contactNumber: contactNumber.trim() }),
         })
       );
     }
@@ -485,52 +520,8 @@ export default function CreateCoachPostScreen() {
           <ActivityIndicator size="large" color={ACCENT} />
           <Text style={styles.loadingText}>Loading details...</Text>
         </View>
-      ) : coachPost ? (
-        /* ── VIEW MODE (Coach Post Exists) ── */
-        <ScrollView style={styles.scrollContainer} contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
-          {/* Post Card */}
-          <View style={styles.coachPostCard}>
-            <View style={styles.postImageContainer}>
-              <Image source={{ uri: coachPost.postimage }} style={[styles.postImage, { height: (SCREEN_WIDTH * 2) / 3 }]} />
-              <TouchableOpacity style={styles.editIconBadge} onPress={openEditModal}>
-                <Ionicons name="create" size={20} color={TEXT_PRIMARY} />
-              </TouchableOpacity>
-            </View>
-
-            <View style={styles.postBody}>
-              {/* Name */}
-              <Text style={styles.postCoachName}>{coachPost.fullname || 'Coach Post'}</Text>
-              
-              {/* Centered About/Description Text */}
-              <Text style={[styles.postDescription, { textAlign: 'center', marginBottom: 20 }]}>{coachPost.description}</Text>
-
-              {/* Experience */}
-              <Text style={styles.sectionTitle}>Experience</Text>
-              <Text style={[styles.postDescription, { marginBottom: 20 }]}>{coachPost.experience}</Text>
-
-              {/* Fee and Duration */}
-              <View style={styles.postDetailsGrid}>
-                <View style={styles.postDetailRow}>
-                  <Ionicons name="cash-outline" size={18} color={SUCCESS_GREEN} />
-                  <Text style={styles.postDetailText}><Text style={styles.boldLabel}>Fee:</Text> Rs. {coachPost.fee}</Text>
-                </View>
-
-                <View style={styles.postDetailRow}>
-                  <Ionicons name="time-outline" size={18} color={ACCENT} />
-                  <Text style={styles.postDetailText}><Text style={styles.boldLabel}>Duration:</Text> {coachPost.duration} Months</Text>
-                </View>
-              </View>
-
-              {/* Contact number banner */}
-              <View style={styles.contactWrapperCard}>
-                <Ionicons name="call" size={18} color={BG} />
-                <Text style={styles.contactText}>Contact me: {coachPost.contactNumber}</Text>
-              </View>
-            </View>
-          </View>
-        </ScrollView>
       ) : (
-        /* ── CREATE FORM MODE ── */
+        /* ── FORM MODE ── */
         <ScrollView
           ref={scrollViewRef}
           style={styles.scrollContainer}
@@ -579,6 +570,7 @@ export default function CreateCoachPostScreen() {
                   placeholderTextColor={TEXT_MUTED}
                   value={fullname}
                   onChangeText={setFullname}
+                  editable={!coachPost}
                 />
               </View>
             </View>
@@ -667,7 +659,7 @@ export default function CreateCoachPostScreen() {
           {/* Submit Button */}
           <TouchableOpacity
             style={[styles.submitButton, isActionLoading && styles.submitButtonDisabled]}
-            onPress={handleCreateCoachPost}
+            onPress={coachPost ? handleSaveUpdates : handleCreateCoachPost}
             disabled={isActionLoading}
             activeOpacity={0.85}
           >
@@ -675,11 +667,26 @@ export default function CreateCoachPostScreen() {
               <ActivityIndicator size="small" color={BG} />
             ) : (
               <>
-                <Text style={styles.submitButtonText}>Create Coach Post</Text>
+                <Text style={styles.submitButtonText}>
+                  {coachPost ? "Edit Coach Post" : "Create Coach Post"}
+                </Text>
                 <Ionicons name="checkmark" size={20} color={BG} />
               </>
             )}
           </TouchableOpacity>
+
+          {/* Delete Button (only if post exists) */}
+          {coachPost && (
+            <TouchableOpacity
+              style={[styles.deletePostBtn, isActionLoading && styles.submitButtonDisabled]}
+              onPress={() => setDeleteConfirmVisible(true)}
+              disabled={isActionLoading}
+              activeOpacity={0.8}
+            >
+              <Ionicons name="trash-outline" size={20} color={ERROR_RED} />
+              <Text style={styles.deletePostBtnText}>Delete Coach Post</Text>
+            </TouchableOpacity>
+          )}
         </ScrollView>
       )}
 

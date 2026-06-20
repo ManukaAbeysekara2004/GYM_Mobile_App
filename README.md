@@ -151,11 +151,11 @@ pip install -r requirements.txt
 ###  4. Place Dataset & Models
 After downloading the assets from Hugging Face, extract the compressed files and arrange them inside the project folder exactly as shown below:
 
-### A. Place Dataset
+***A. Place Dataset***
 * Action: Extract your downloaded `GymApp-DataSet` zip folder.
 * Destination: Place the extracted folder inside `AI_Models/`.
 
-### B. Place Models
+***B. Place Models***
 * Action: Extract your downloaded `GymApp-AI-Models` zip folder.
 * Destination: Place the extracted model files inside `AI_Models/`.
 

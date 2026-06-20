@@ -232,7 +232,7 @@ You can use the following default credentials to log in and test the specific us
 | 👤 Standard User | `User01@.com` (up to `User05@.com`) | `123456` |
 | 🏢 Gym Owner | `Gym01@.com` (up to `Gym05@.com`) | `123456` |
 | 💪 Fitness Coach | `Coach01@.com` (up to `Coach05@.com`) | `123456` |
-| 👨‍💼 Admin User | `Admin01@.com` (up to `Admin05@.com`) | `1234
+| 👨‍💼 Admin User | `Admin01@.com` (up to `Admin05@.com`) | `123456`|
 
 ---
 
@@ -246,7 +246,8 @@ You can use the following default credentials to log in and test the specific us
 
 ## 📜 License & Credits
 This project was developed for educational and research purposes.
-**Developed By:** [Manuka Abeysekara]
+
+**Developed By:** [Manuka Abeysekara]()
 
 
 

@@ -19,7 +19,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { Session } from '../constants/Session';
 
 /* ── Backend Config ── */
-const BACKEND_URL = 'http://192.168.1.5:5000';
+const BACKEND_URL = process.env.EXPO_PUBLIC_BACKEND_URL;
 const ERROR_RED = '#EF4444';
 
 export default function LoginScreen() {

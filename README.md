@@ -173,7 +173,7 @@ Your directory layout must look like this before running the servers:
 
 ### 5. Boot Up the AI Services
 ```bash
-cd AI_Models/AI_Models_Code
+cd AI_Models_Code
 uvicorn main:app --reload
 ```
 The AI microservice will now be running locally.

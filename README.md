@@ -214,6 +214,13 @@ npm install
 npx expo start
 ```
 
+### 2. Create .env
+Create a `.env` file inside `GYM_Mobile_App/frontend/GymApp` and add your IPV4 Address:
+
+```bash
+EXPO_PUBLIC_BACKEND_URL=http://<Your IPV4 address>:5000
+```
+
 ---
 
 ## 📲 How to view the App:
